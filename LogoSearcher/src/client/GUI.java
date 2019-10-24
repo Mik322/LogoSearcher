@@ -8,6 +8,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class GUI implements Observer {
 
@@ -43,6 +45,15 @@ public class GUI implements Observer {
 		//model.addElement("C");
 
 		JList<String> list = new JList<>(model);
+		list.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if(!e.getValueIsAdjusting()) {
+					String selectedValue = list.getSelectedValue();
+					//POR TERMINAR
+				}
+			}
+		});
 		frame.add(list, BorderLayout.EAST);
 		
 		JButton procura = new JButton("procura");
