@@ -4,17 +4,22 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Observable;
+import java.util.Observer;
+
 import javax.swing.*;
 
-public class GUI {
+public class GUI implements Observer {
 
 	private JFrame frame;
+	private Client client;
 	
-	public GUI() {
+	public GUI(Client c) {
 		frame = new JFrame("Interface");
 		frame.setLayout(new BorderLayout());
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		addcontent();
+		client = c;
 	}
 
 	private void addcontent() {
@@ -101,10 +106,17 @@ public class GUI {
 		frame.setVisible(true);
 	}
 
+	/*
 	public static void main(String[] args) {
 		GUI i = new GUI();
 		i.open();
 
+	}*/
+
+	//Quando o cliente recebe um resultado de pesquisa vai ativar este procedimento
+	@Override
+	public void update(Observable o, Object arg) {
+		
 	}
 
 }
