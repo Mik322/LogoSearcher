@@ -15,8 +15,8 @@ public class Algorithm {
 		boolean result = true;
 		
 		while(result) {
-			for (int i=0;i!=subimagem.getHeight();i++) {
-				for (int j=0;j!=subimagem.getWidth();j++) {
+			for (int i=0;i!=subimagem.getWidth();i++) {
+				for (int j=0;j!=subimagem.getHeight();j++) {
 					result = (imagem.getRGB(i+startingX, j+startingY) == subimagem.getRGB(i, j));
 				}
 			}
@@ -31,8 +31,8 @@ public class Algorithm {
 		ArrayList<Integer[]> results = new ArrayList<>();
 		
 		Integer cordinates[] = new Integer[2];
-		for (int i=0; i!=imagem.getHeight()-subimagem.getHeight(); i++) {
-			for (int j=0; j!=imagem.getWidth()-subimagem.getWidth(); j++) {
+		for (int i=0; i!=imagem.getWidth()-subimagem.getWidth(); i++) {
+			for (int j=0; j!=imagem.getHeight()-subimagem.getHeight(); j++) {
 				if (imagem.getRGB(i, j)==subimagem.getRGB(0, 0) && procuraSub(imagem,subimagem,i,j)) {
 					cordinates[0] = i;
 					cordinates[1] = j;
@@ -55,15 +55,15 @@ public class Algorithm {
 		return null;
 	}
 
-	public static void main(String[] args) {
-		/*try {
+	/*public static void main(String[] args) {
+		try {
 			BufferedImage imagem = ImageIO.read(new File("out/image1_1.png"));
 			BufferedImage subimagem = ImageIO.read(new File("Superman.png"));
-			procuraSub(imagem, subimagem);
+			
 		} catch (IOException e) {
 
 			e.printStackTrace();
-		}*/
+		}
 
-	}
+	}*/
 }
