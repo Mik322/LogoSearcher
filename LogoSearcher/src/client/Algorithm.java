@@ -35,7 +35,14 @@ public class Algorithm {
 		return false;
 	}
 	
-	public static ArrayList<Integer> procura(byte[] imagem, byte[] subimagem) {
+	public static ArrayList<Integer[]> procura(byte[] img, byte[] subimg) {
+		BufferedImage imagem = convertToImage(img);
+		BufferedImage subimagem = convertToImage(subimg);
+		
+		return null;
+	}
+	
+	private static BufferedImage convertToImage(byte[] img) {
 		return null;
 	}
 	

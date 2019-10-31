@@ -13,7 +13,7 @@ public class Client extends Observable {
 	public void sendImages(BufferedImage imagem, BufferedImage subimagem) {
 		byte[] img = convertToByteArray(imagem);
 		byte[] subimg = convertToByteArray(subimagem);
-		ArrayList<Integer> results = Algorithm.procura(img, subimg);
+		ArrayList<Integer[]> results = Algorithm.procura(img, subimg);
 		notifyObservers(results);
 	}
 

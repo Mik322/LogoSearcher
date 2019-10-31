@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -127,6 +128,8 @@ public class GUI implements Observer {
 	//Quando o cliente recebe um resultado de pesquisa vai ativar este procedimento
 	@Override
 	public void update(Observable o, Object arg) {
+		@SuppressWarnings("unchecked")
+		ArrayList<Integer[]> results = (ArrayList<Integer[]>)arg;
 		
 	}
 
