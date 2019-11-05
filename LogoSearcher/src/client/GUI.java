@@ -16,6 +16,7 @@ public class GUI implements Observer {
 
 	private JFrame frame;
 	private Client client;
+	private BufferedImage image;
 	
 	public GUI(Client c) {
 		frame = new JFrame("Interface");
@@ -50,8 +51,13 @@ public class GUI implements Observer {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if(!e.getValueIsAdjusting()) {
-					String selectedValue = list.getSelectedValue();
-					//POR TERMINAR
+					File selectedValue = new File(list.getSelectedValue());
+
+					ImageIcon image = new ImageIcon(selectedValue.getAbsolutePath());
+					JLabel imageLabel = new JLabel(image);
+					frame.add(imageLabel,BorderLayout.CENTER);
+					frame.revalidate();
+		            frame.repaint();
 				}
 			}
 		});
@@ -60,7 +66,7 @@ public class GUI implements Observer {
 		JButton procura = new JButton("procura");
 		procura.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				//nao sei que funçao usar
 			}
 		});
 		panel.add(procura, BorderLayout.SOUTH);
@@ -78,7 +84,6 @@ public class GUI implements Observer {
 				File selectedFile = null;
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					selectedFile = jfc.getSelectedFile();
-					//System.out.println(selectedFile.getAbsolutePath());
 				}
 
 				pasta.setText(selectedFile.getName());
@@ -97,13 +102,14 @@ public class GUI implements Observer {
 				if (returnValue2 == JFileChooser.APPROVE_OPTION) {
 					selectedImage = imageChooser.getSelectedFile();
 				}
-				
-				ImageIcon image = new ImageIcon(selectedImage.getAbsolutePath());
-				JLabel imageLabel = new JLabel(image);
-				frame.add(imageLabel,BorderLayout.CENTER);
-				frame.revalidate();
-	            frame.repaint();
 	            imagem.setText(selectedImage.getName());
+				
+				 try {
+					image = ImageIO.read(new File(selectedImage.getAbsolutePath()));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		panelButton.add(BImagem, BorderLayout.SOUTH);
