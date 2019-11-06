@@ -12,7 +12,8 @@ import java.util.Observable;
 import javax.imageio.ImageIO;
 
 public class Client extends Observable {
-	private static String OUTPUT_NAME = "imagensOut";
+	private static String OUTPUT_NAME = "OUT";
+	private File file;
 	
 	public void sendImages(File[] imagensDir, BufferedImage subimagem) {
 		byte[] subimg = convertToByteArray(subimagem);
@@ -29,17 +30,19 @@ public class Client extends Observable {
 				}
 			} catch (Exception e) {}
 		}
-		notifyObservers(OUTPUT_NAME);
+		file = new File(OUTPUT_NAME);
+		setChanged();
+		notifyObservers(file);
 	}
 
 	private void drawImage(ArrayList<int[]> results, BufferedImage imagem, BufferedImage subimagem, int n) {
-		Graphics2D g2d = imagem.createGraphics();
-		g2d.setColor(Color.RED);
 		for (int[] i: results) {
+			Graphics2D g2d = imagem.createGraphics();
+			g2d.setColor(Color.RED);
 			g2d.drawRect(i[0], i[1], subimagem.getWidth(), subimagem.getHeight());
+			g2d.dispose();
 		}
-		g2d.dispose();
-		String fileName = OUTPUT_NAME+"/out" + n + ".png";
+		String fileName = OUTPUT_NAME+"\\out" + n + ".png";
 		try {
 			ImageIO.write(imagem, "png", new File(fileName));
 		} catch (IOException e) {

@@ -147,8 +147,8 @@ public class GUI implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("Resultados chegaram ao GUI");
-		dirOut = (String) arg;
-		File file = new File(dirOut);
+		File file = (File) arg;
+		dirOut = file.getAbsolutePath();
 		File[] imgs = file.listFiles();
 		for (File f : imgs) {
 			model.addElement(f.getName());
