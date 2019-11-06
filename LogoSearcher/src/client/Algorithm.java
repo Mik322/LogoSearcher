@@ -11,36 +11,43 @@ import javax.imageio.ImageIO;
 
 public class Algorithm {
 
-	private static boolean procuraSub(BufferedImage imagem, BufferedImage subimagem, int startingX, int startingY) {
+	private static boolean procuraSub(BufferedImage imagem, BufferedImage subimagem, int sX, int sY) {
 		boolean result = true;
-		
-		while(result) {
-			for (int i=0;i!=subimagem.getWidth();i++) {
-				for (int j=0;j!=subimagem.getHeight();j++) {
-					result = (imagem.getRGB(i+startingX, j+startingY) == subimagem.getRGB(i, j));
+		System.out.println("procuraSub foi chamado");
+		for (int i = 0; i != subimagem.getWidth(); i++) {
+			for (int j = 0; j != subimagem.getHeight(); j++) {
+				System.out.println(imagem.getRGB(i+sX, j+sY)+" "+subimagem.getRGB(i, j));
+				result = (imagem.getRGB(i + sX, j + sY) == subimagem.getRGB(i, j));
+				if (!result) {
+					System.out.println(result);
+					return result;
 				}
 			}
 		}
-		
+		System.out.println(result);
 		return result;
 	}
 
 	public static ArrayList<Integer[]> procura(byte[] img, byte[] subimg) {
+		System.out.println("Cheguei ao procura");
 		BufferedImage imagem = convertToImage(img);
 		BufferedImage subimagem = convertToImage(subimg);
 		ArrayList<Integer[]> results = new ArrayList<>();
-		
+		System.out.println(results);
 		Integer cordinates[] = new Integer[2];
-		for (int i=0; i!=imagem.getWidth()-subimagem.getWidth(); i++) {
-			for (int j=0; j!=imagem.getHeight()-subimagem.getHeight(); j++) {
-				if (imagem.getRGB(i, j)==subimagem.getRGB(0, 0) && procuraSub(imagem,subimagem,i,j)) {
+		for (int i = 0; i != imagem.getWidth() - subimagem.getWidth(); i++) {
+			for (int j = 0; j != imagem.getHeight() - subimagem.getHeight(); j++) {
+				// System.out.println(imagem.getRGB(i, j)+" " +i+" "+j+" "+ subimagem.getRGB(0,
+				// 0));
+				if (imagem.getRGB(i, j) == subimagem.getRGB(0, 0) && procuraSub(imagem, subimagem, i, j)) {
 					cordinates[0] = i;
 					cordinates[1] = j;
+					System.out.println(cordinates);
 					results.add(cordinates);
 				}
 			}
 		}
-		
+
 		return results;
 	}
 
@@ -48,22 +55,10 @@ public class Algorithm {
 		try {
 			InputStream in = new ByteArrayInputStream(img);
 			BufferedImage bImageFromConvert = ImageIO.read(in);
-			ImageIO.write(bImageFromConvert, "png", new File("imagens/out.png"));
+			// ImageIO.write(bImageFromConvert, "png", new File("imagens/out.png"));
 			return bImageFromConvert;
 		} catch (Exception e) {
 		}
 		return null;
 	}
-
-	/*public static void main(String[] args) {
-		try {
-			BufferedImage imagem = ImageIO.read(new File("out/image1_1.png"));
-			BufferedImage subimagem = ImageIO.read(new File("Superman.png"));
-			
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
-
-	}*/
 }
