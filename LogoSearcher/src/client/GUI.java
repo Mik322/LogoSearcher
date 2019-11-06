@@ -22,8 +22,9 @@ public class GUI implements Observer {
 	private JFrame frame;
 	private Client client;
 	private BufferedImage logo;
-	private BufferedImage image;
-	private String directory;
+	private String dirOut;
+	private File jDir[];
+	private DefaultListModel<String> model = new DefaultListModel<>();
 
 	public GUI(Client c) {
 		frame = new JFrame("Interface");
@@ -52,7 +53,6 @@ public class GUI implements Observer {
 		imagem.setPreferredSize(new Dimension(400, 24));
 		panelImage.add(imagem, BorderLayout.SOUTH);
 
-		DefaultListModel<String> model = new DefaultListModel<>();
 		model.addElement("Imagens encontradas");
 
 		JList<String> list = new JList<>(model);
@@ -61,15 +61,9 @@ public class GUI implements Observer {
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
 					// File selectedValue = new File(list.getSelectedValue());
-					String fullDir = directory + "\\" + list.getSelectedValue();
+					String fullDir = dirOut + "\\" + list.getSelectedValue();
 
 					ImageIcon imageIcon = new ImageIcon(fullDir);
-					try {
-						image = ImageIO.read(new File(fullDir));
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
 					JLabel imageLabel = new JLabel(imageIcon);
 					panelIcon.removeAll();
 					panelIcon.add(imageLabel, BorderLayout.CENTER);
@@ -98,17 +92,10 @@ public class GUI implements Observer {
 				}
 
 				File dir = new File(jfc.getSelectedFile().getAbsolutePath());
-				directory = dir.getAbsolutePath();
 
-				File[] list = dir.listFiles();
+				jDir = dir.listFiles();
 
 				pasta.setText(selectedFile.getName());
-				model.clear();
-				for (File f : list) {
-					if (f.getName().contains("png")) {
-						model.addElement(f.getName());
-					}
-				}
 			}
 		});
 		panelButton.add(BPasta, BorderLayout.NORTH);
@@ -140,7 +127,7 @@ public class GUI implements Observer {
 		JButton procura = new JButton("procura");
 		procura.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				client.sendImages(image, logo);
+				client.sendImages(jDir, logo);
 			}
 		});
 		panel.add(procura, BorderLayout.SOUTH);
@@ -160,10 +147,12 @@ public class GUI implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("Resultados chegaram ao GUI");
-		@SuppressWarnings("unchecked")
-		ArrayList<Integer[]> results = (ArrayList<Integer[]>) arg;
-		System.out.println(results.toString());
-
+		dirOut = (String) arg;
+		File file = new File(dirOut);
+		File[] imgs = file.listFiles();
+		for (File f : imgs) {
+			model.addElement(f.getName());
+		}
 	}
 
 }
