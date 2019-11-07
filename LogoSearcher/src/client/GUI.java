@@ -2,13 +2,11 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -146,7 +144,6 @@ public class GUI implements Observer {
 	// Quando o cliente recebe um resultado de pesquisa vai ativar este procedimento
 	@Override
 	public void update(Observable o, Object arg) {
-		System.out.println("Resultados chegaram ao GUI");
 		File file = (File) arg;
 		dirOut = file.getAbsolutePath();
 		File[] imgs = file.listFiles();
