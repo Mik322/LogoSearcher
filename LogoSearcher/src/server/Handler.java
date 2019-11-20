@@ -11,7 +11,7 @@ public class Handler implements Runnable {
 	private Server server;
 	
 	private static int CLIENT = 1;
-	private static int WORKER = 1;
+	private static int WORKER = 2;
 	
 	@Override
 	public void run() {
@@ -22,7 +22,7 @@ public class Handler implements Runnable {
 			if (type == CLIENT) {
 				new DealWithClient(server, in, out).start();
 			} else if (type == WORKER) {
-				new DealWithServer(server, in, out).start();
+				new DealWithWorker(server, in, out).start();
 			}
 		} catch (IOException e) {}
 	}

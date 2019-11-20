@@ -16,7 +16,6 @@ public class Server {
 		try {
 			while (true) {
 				pool.execute(new Handler(s.accept(),this));
-				//new DealWithClient(socket, this).start();
 			}
 
 		} finally {

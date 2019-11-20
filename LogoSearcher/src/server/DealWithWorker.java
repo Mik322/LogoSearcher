@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class DealWithServer extends DealWith {
+public class DealWithWorker extends DealWith {
 	
-	public DealWithServer(Server server, ObjectInputStream in, ObjectOutputStream out) {
+	public DealWithWorker(Server server, ObjectInputStream in, ObjectOutputStream out) {
 		super(server,in,out);
 		try {
 			serve();
@@ -15,7 +15,6 @@ public class DealWithServer extends DealWith {
 	
 	@Override
 	void serve() throws IOException {
-		
 	}
 
 }

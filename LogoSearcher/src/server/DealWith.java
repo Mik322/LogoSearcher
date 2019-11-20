@@ -12,6 +12,7 @@ public abstract class DealWith extends Thread {
 	
 	public DealWith(Server server,ObjectInputStream in, ObjectOutputStream out) {
 		this.server = server;
+		this.in = in;
 		this.out = out;
 	}
 	
