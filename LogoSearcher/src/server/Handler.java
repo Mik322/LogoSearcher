@@ -5,6 +5,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import server.dealwith.DealWithClient;
+import server.dealwith.DealWithWorker;
+
 public class Handler implements Runnable {
 
 	private Socket s;

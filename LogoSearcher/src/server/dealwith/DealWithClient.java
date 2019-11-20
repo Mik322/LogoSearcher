@@ -1,8 +1,11 @@
-package server;
+package server.dealwith;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import server.Server;
+import server.jobs.Job;
 
 public class DealWithClient extends DealWith {
 
@@ -15,7 +18,11 @@ public class DealWithClient extends DealWith {
 
 	@Override
 	void serve() throws IOException {
-		
+		try {
+			byte[] img = (byte[]) super.in.readObject();
+			byte[] subimg = (byte[]) super.in.readObject();
+			super.sendToServer(new Job(img,subimg,super.out));
+		} catch (ClassNotFoundException e) {}
 	}
 
 }

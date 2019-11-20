@@ -5,10 +5,14 @@ import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import server.jobs.Job;
+import server.jobs.JobMap;
+
 public class Server {
 
-	public static final int PORTO = 8080;
-	public final ExecutorService pool = Executors.newFixedThreadPool(2);
+	private static final int PORTO = 8080;
+	private final ExecutorService pool = Executors.newFixedThreadPool(2);
+	private JobMap jobs = new JobMap();
 	
 	public void startServing() throws IOException {
 		ServerSocket s = new ServerSocket(PORTO);
@@ -19,8 +23,13 @@ public class Server {
 			}
 
 		} finally {
+			pool.shutdown();
 			s.close();
 		}
+	}
+	
+	public void sendJob(Job job) {
+		jobs.add(job);
 	}
 
 	public static void main(String[] args) {

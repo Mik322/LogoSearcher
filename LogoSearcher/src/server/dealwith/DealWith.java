@@ -1,8 +1,11 @@
-package server;
+package server.dealwith;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import server.Server;
+import server.jobs.Job;
 
 public abstract class DealWith extends Thread {
 	
@@ -17,4 +20,8 @@ public abstract class DealWith extends Thread {
 	}
 	
 	abstract void serve() throws IOException;
+
+	public void sendToServer(Job job) {
+		server.sendJob(job);
+	}
 }

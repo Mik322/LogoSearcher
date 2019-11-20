@@ -11,10 +11,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Observable;
-
 import javax.imageio.ImageIO;
 
 public class Client extends Observable {
@@ -32,6 +30,8 @@ public class Client extends Observable {
 	private void runClient() {
 		try {
 			doConections();
+			out.writeInt(CLIENT);
+			out.flush();
 			GUI window = new GUI(this);
 			this.addObserver(window);
 			window.open();
@@ -57,7 +57,9 @@ public class Client extends Observable {
 				BufferedImage imagem = ImageIO.read(f);
 				byte[] img = convertToByteArray(imagem);
 				out.write(img);
+				out.flush();
 				out.write(subimg);
+				out.flush();
 				@SuppressWarnings("unchecked")
 				ArrayList<Point[]> results = (ArrayList<Point[]>) in.readObject();
 				if (results.size()!=0) {
@@ -104,6 +106,8 @@ public class Client extends Observable {
 
 	public static void main(String[] args) {
 		Client c = new Client();
+		c.runClient();
 	}
+	
 
 }
