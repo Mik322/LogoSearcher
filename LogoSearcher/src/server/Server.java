@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import server.taskqueue.TaskMap;
+import server.taskqueue.TaskQueue;
 import streamedobjects.Task;
 
 public class Server {
@@ -36,12 +37,13 @@ public class Server {
 	}
 
 	//Adiciona tipo de pesquisa ao map
-	public void addType(String type) {
+	public synchronized void addType(String type) {
 		if (types.containsKey(type)) {
 			types.put(type, types.get(type)+1);
 		} else {
 			types.put(type, 1);
 		}
+		tasks.addType(type);
 	}
 
 	public Set<String> getTypesAvailable() {
@@ -57,6 +59,10 @@ public class Server {
 
 		}
 
+	}
+
+	public TaskQueue getQueue(String type) {
+		return tasks.getQueue(type);
 	}
 
 

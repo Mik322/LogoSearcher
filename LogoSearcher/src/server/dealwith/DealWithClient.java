@@ -27,6 +27,7 @@ public class DealWithClient extends DealWith {
 	@Override
 	void serve() throws IOException {
 		out.writeObject(server.getTypesAvailable());
+		out.flush();
 		while (true) {
 			try {
 				Job job = (Job) super.in.readObject();
