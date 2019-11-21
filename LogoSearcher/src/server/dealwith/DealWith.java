@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import server.Server;
-import streamedobjects.Job;
+import streamedobjects.Task;
 
 public abstract class DealWith extends Thread {
 	
@@ -21,7 +21,7 @@ public abstract class DealWith extends Thread {
 	
 	abstract void serve() throws IOException;
 
-	public void sendToServer(Job job) {
-		server.sendJob(job);
+	public void sendToServer(Task task) {
+		server.sendTask(task);
 	}
 }

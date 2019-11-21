@@ -2,14 +2,14 @@ package server.taskqueue;
 
 import java.util.LinkedList;
 
-import streamedobjects.Job;
+import streamedobjects.Task;
 
 public class TaskQueue {
 	
-	private LinkedList<Job> jobs = new LinkedList<>();
+	private LinkedList<Task> tasks = new LinkedList<>();
 
-	public void push(Job job) {
-		jobs.add(job);
+	public void push(Task task) {
+		tasks.add(task);
 	}
 	
 }

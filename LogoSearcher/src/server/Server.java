@@ -6,13 +6,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import server.taskqueue.TaskMap;
-import streamedobjects.Job;
+import streamedobjects.Task;
 
 public class Server {
 
 	private static final int PORTO = 8080;
 	private final ExecutorService pool = Executors.newFixedThreadPool(2);
-	private TaskMap jobs = new TaskMap();
+	private TaskMap tasks = new TaskMap();
 	
 	public void startServing() throws IOException {
 		ServerSocket s = new ServerSocket(PORTO);
@@ -28,8 +28,8 @@ public class Server {
 		}
 	}
 	
-	public void sendJob(Job job) {
-		jobs.add(job);
+	public void sendTask(Task task) {
+		tasks.add(task);
 	}
 
 	public static void main(String[] args) {
