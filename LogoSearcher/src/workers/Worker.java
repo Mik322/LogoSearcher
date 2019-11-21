@@ -1,22 +1,11 @@
 package workers;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
+import java.awt.Point;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
-
 
 public abstract class Worker extends Thread {
 
@@ -37,7 +26,8 @@ public abstract class Worker extends Thread {
 	        out.writeInt(WORKER);
 	        out.flush();
 	        out.writeObject(typeOfWorker);
-	        recieve();
+	        out.flush();
+	        recieveAndExecute();
 		} catch (Exception e) {
 
 		} finally {
@@ -50,10 +40,13 @@ public abstract class Worker extends Thread {
 		}
 	}
 	
-	private void recieve() {
+	private void recieveAndExecute() {
 		while(true) {
 			try {
 				Task task = (Task) in.readObject();
+				ArrayList<Point[]> results = procura(task.getImg(), task.getSubimg());
+				out.writeObject(results);
+				out.flush();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -62,16 +55,14 @@ public abstract class Worker extends Thread {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 
-	public abstract ArrayList<int[]> procura(byte[] img, byte[] subimg);
+	public abstract ArrayList<Point[]> procura(byte[] img, byte[] subimg);
 	
 	private void connectToServer(String endereco, int PORTO) throws IOException {
-		System.out.println("Endereco = " + endereco);
 		socket = new Socket(endereco, PORTO);
-		System.out.println("Socket = " + socket);
-		
+		in = new ObjectInputStream(socket.getInputStream());
+		out = new ObjectOutputStream(socket.getOutputStream());
 	}
 
 	public static void main(String[] args) {
