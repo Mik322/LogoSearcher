@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import streamedobjects.Task;
+
 
 public abstract class Worker extends Thread {
 

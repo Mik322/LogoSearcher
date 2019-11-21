@@ -9,6 +9,8 @@ import server.Server;
 import streamedobjects.Job;
 
 public class DealWithClient extends DealWith {
+	
+	private Job job;
 
 	public DealWithClient(Server server, ObjectInputStream in, ObjectOutputStream out) {
 		super(server, in, out);
@@ -20,8 +22,7 @@ public class DealWithClient extends DealWith {
 	@Override
 	void serve() throws IOException {
 		try {
-			byte[] img = (byte[]) super.in.readObject();
-			byte[] subimg = (byte[]) super.in.readObject();
+			job = (Job) super.in.readObject();
 			@SuppressWarnings("unchecked")
 			ArrayList<String> types = (ArrayList<String>) super.in.readObject();
 			//super.sendToServer(new Job(img,subimg,super.out,types));
