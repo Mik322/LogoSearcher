@@ -5,14 +5,14 @@ import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import jobs.Job;
-import jobs.JobMap;
+import server.taskqueue.TaskMap;
+import streamedobjects.Job;
 
 public class Server {
 
 	private static final int PORTO = 8080;
 	private final ExecutorService pool = Executors.newFixedThreadPool(2);
-	private JobMap jobs = new JobMap();
+	private TaskMap jobs = new TaskMap();
 	
 	public void startServing() throws IOException {
 		ServerSocket s = new ServerSocket(PORTO);

@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import jobs.Job;
 import server.Server;
+import streamedobjects.Job;
 
 public class DealWithWorker extends DealWith {
 	

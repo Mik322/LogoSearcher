@@ -1,11 +1,13 @@
-package jobs;
+package server.taskqueue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class JobMap {
+import streamedobjects.Job;
+
+public class TaskMap {
 	
-	private HashMap<String, JobQueue> map = new HashMap<>();
+	private HashMap<String, TaskQueue> map = new HashMap<>();
 	
 	public void add(Job job) {
 		ArrayList<String> types = job.getTypes();
@@ -15,7 +17,7 @@ public class JobMap {
 	}
 	
 	public void addType(String type) {
-		map.put(type, new JobQueue());
+		map.put(type, new TaskQueue());
 	}
 	
 }

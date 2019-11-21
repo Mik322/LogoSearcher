@@ -1,8 +1,10 @@
-package jobs;
+package server.taskqueue;
 
 import java.util.LinkedList;
 
-public class JobQueue {
+import streamedobjects.Job;
+
+public class TaskQueue {
 	
 	private LinkedList<Job> jobs = new LinkedList<>();
 

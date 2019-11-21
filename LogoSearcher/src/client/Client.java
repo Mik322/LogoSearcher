@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import javax.imageio.ImageIO;
 
-import jobs.Job;
+import streamedobjects.Job;
 
 public class Client extends Observable {
 	private static String OUTPUT_NAME = "OUT";

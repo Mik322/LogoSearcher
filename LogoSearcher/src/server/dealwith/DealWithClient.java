@@ -5,8 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import jobs.Job;
 import server.Server;
+import streamedobjects.Job;
 
 public class DealWithClient extends DealWith {
 

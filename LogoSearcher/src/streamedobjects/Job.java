@@ -1,4 +1,4 @@
-package jobs;
+package streamedobjects;
 
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
