@@ -118,6 +118,4 @@ public class Client extends Observable {
 		Client c = new Client();
 		c.runClient();
 	}
-	
-
 }
