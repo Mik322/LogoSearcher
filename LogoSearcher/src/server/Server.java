@@ -5,8 +5,8 @@ import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import server.jobs.Job;
-import server.jobs.JobMap;
+import jobs.Job;
+import jobs.JobMap;
 
 public class Server {
 

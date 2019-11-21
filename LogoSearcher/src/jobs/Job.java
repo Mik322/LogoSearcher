@@ -1,28 +1,23 @@
-package server.jobs;
+package jobs;
 
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class Job {
 	
-	private byte[] img;
+	private ArrayList<byte[]> imgs;
 	private byte[] subimg;
 	private ObjectOutputStream client;
 	private ArrayList<String> types;
 
-	public Job(byte[] img, byte[] subimg, ObjectOutputStream client, ArrayList<String> types) {
-		this.img = img;
+	public Job(ArrayList<byte[]> imgs, byte[] subimg, ArrayList<String> types) {
+		this.imgs = imgs;
 		this.subimg = subimg;
-		this.client = client;
 		this.types = types;
 	}
 
 	public ArrayList<String> getTypes() {
 		return types;
-	}
-
-	public byte[] getImg() {
-		return img;
 	}
 
 	public byte[] getSubimg() {
@@ -31,6 +26,14 @@ public class Job {
 
 	public ObjectOutputStream getClient() {
 		return client;
+	}
+
+	public ArrayList<byte[]> getImgs() {
+		return imgs;
+	}
+
+	public void setClient(ObjectOutputStream client) {
+		this.client = client;
 	}
 
 }

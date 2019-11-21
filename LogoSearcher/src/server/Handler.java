@@ -21,7 +21,7 @@ public class Handler implements Runnable {
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(s.getInputStream());
-			int type = (int) in.read();
+			int type = in.readInt();
 			if (type == CLIENT) {
 				new DealWithClient(server, in, out).start();
 			} else if (type == WORKER) {

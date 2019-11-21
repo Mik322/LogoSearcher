@@ -5,8 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import jobs.Job;
 import server.Server;
-import server.jobs.Job;
 
 public class DealWithClient extends DealWith {
 
@@ -24,7 +24,7 @@ public class DealWithClient extends DealWith {
 			byte[] subimg = (byte[]) super.in.readObject();
 			@SuppressWarnings("unchecked")
 			ArrayList<String> types = (ArrayList<String>) super.in.readObject();
-			super.sendToServer(new Job(img,subimg,super.out,types));
+			//super.sendToServer(new Job(img,subimg,super.out,types));
 		} catch (ClassNotFoundException e) {}
 	}
 

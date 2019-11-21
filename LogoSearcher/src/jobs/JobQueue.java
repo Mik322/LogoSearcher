@@ -1,4 +1,4 @@
-package server.jobs;
+package jobs;
 
 import java.util.LinkedList;
 

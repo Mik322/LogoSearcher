@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Observable;
 import javax.imageio.ImageIO;
 
+import jobs.Job;
+
 public class Client extends Observable {
 	private static String OUTPUT_NAME = "OUT";
 	private File file;
@@ -48,26 +50,34 @@ public class Client extends Observable {
 		out = new ObjectOutputStream(socket.getOutputStream());
 	}
 	
-	public void sendImages(File[] imagensDir, BufferedImage subimagem) {
+	public void sendImages(File[] imagensDir, BufferedImage subimagem, ArrayList<String> types) {
 		byte[] subimg = convertToByteArray(subimagem);
 		int n = 1;
+		ArrayList<byte[]> imgs = new ArrayList<>();
 		
 		for (File f:imagensDir) {
 			try {
 				BufferedImage imagem = ImageIO.read(f);
 				byte[] img = convertToByteArray(imagem);
-				out.write(img);
-				out.flush();
-				out.write(subimg);
-				out.flush();
-				@SuppressWarnings("unchecked")
-				ArrayList<Point[]> results = (ArrayList<Point[]>) in.readObject();
-				if (results.size()!=0) {
-					drawImage(results, imagem, n);
-					n++;
-				}
+				imgs.add(img);
 			} catch (Exception e) {}
 		}
+		try {
+			out.writeObject(new Job(imgs, subimg, types));
+			out.flush();
+		} catch (IOException e) {}
+			
+			
+			try {
+				@SuppressWarnings("unchecked")
+				ArrayList<Point[]> results = (ArrayList<Point[]>) in.readObject();
+			} catch (ClassNotFoundException e) {
+			} catch (IOException e) {}
+			
+			/*if (results.size()!=0) {
+				drawImage(results, imagem, n);
+				n++;
+			}*/
 		file = new File(OUTPUT_NAME);
 		setChanged();
 		notifyObservers(file);

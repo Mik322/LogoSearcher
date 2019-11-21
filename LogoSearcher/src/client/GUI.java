@@ -125,7 +125,7 @@ public class GUI implements Observer {
 		JButton procura = new JButton("procura");
 		procura.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				client.sendImages(jDir, logo);
+				client.sendImages(jDir, logo, null);
 			}
 		});
 		panel.add(procura, BorderLayout.SOUTH);
