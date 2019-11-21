@@ -5,9 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import server.Server;
-import streamedobjects.Job;
 
 public class DealWithWorker extends DealWith {
+	
+	private String type;
 	
 	public DealWithWorker(Server server, ObjectInputStream in, ObjectOutputStream out) {
 		super(server,in,out);
@@ -18,6 +19,10 @@ public class DealWithWorker extends DealWith {
 	
 	@Override
 	void serve() throws IOException {
+		try {
+			type = (String) in.readObject();
+			server.addType(type);
+		} catch (ClassNotFoundException e) {}
 		while (true) {
 		}
 	}

@@ -9,7 +9,7 @@ import streamedobjects.Task;
 
 public abstract class DealWith extends Thread {
 	
-	private Server server;
+	protected Server server;
 	protected ObjectInputStream in;
 	protected ObjectOutputStream out;
 	

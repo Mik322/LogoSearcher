@@ -13,6 +13,7 @@ public class NormalWorker extends Worker {
 	
 	NormalWorker(String socket, int PORTO, String typeOfWorker){
 		super(socket, PORTO, typeOfWorker);
+		runClient();
 	}
 
 	

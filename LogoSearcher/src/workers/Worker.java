@@ -15,15 +15,20 @@ public abstract class Worker extends Thread {
 	private Socket socket;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
+	private String endereco;
+	private int PORTO;
+	private Object typeOfWorker;
 	
 	private static final int WORKER = 2;
 	
 	
 	public Worker(String endereco, int PORTO, String typeOfWorker) {
-	
+		this.endereco = endereco;
+		this.PORTO = PORTO;
+		this.typeOfWorker = typeOfWorker;
 	}
 	
-	public void runClient(String endereco, int PORTO, String typeOfWorker) {
+	public void runClient() {
 		try {
 			connectToServer(endereco, PORTO);
 	        out.writeInt(WORKER);

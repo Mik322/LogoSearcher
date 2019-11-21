@@ -13,6 +13,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.Set;
+
 import javax.imageio.ImageIO;
 
 import streamedobjects.Job;
@@ -37,8 +39,10 @@ public class Client extends Observable {
 			GUI window = new GUI(this);
 			this.addObserver(window);
 			window.open();
-			//window.writeSearchTypes(); // Vai escrever os tipos de pesquisa disponoveis
-		} catch (IOException e) {
+			@SuppressWarnings("unchecked")
+			Set<String> types = (Set<String>) in.readObject();
+			//window.writeSearchTypes(types); // Vai escrever os tipos de pesquisa disponoveis
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
