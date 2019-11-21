@@ -1,5 +1,6 @@
 package workers;
 
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -37,7 +38,8 @@ public abstract class Worker extends Thread {
 	        out.writeInt(WORKER);
 	        out.flush();
 	        out.writeObject(typeOfWorker);
-	        recieve();
+	        out.flush();
+	        recieveAndExecute();
 		} catch (Exception e) {
 
 		} finally {
@@ -50,10 +52,13 @@ public abstract class Worker extends Thread {
 		}
 	}
 	
-	private void recieve() {
+	private void recieveAndExecute() {
 		while(true) {
 			try {
 				Task task = (Task) in.readObject();
+				ArrayList<Point[]> results = procura(task.getImg(), task.getSubimg());
+				out.writeObject(results);
+				out.flush();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -65,13 +70,12 @@ public abstract class Worker extends Thread {
 		
 	}
 
-	public abstract ArrayList<int[]> procura(byte[] img, byte[] subimg);
+	public abstract ArrayList<Point[]> procura(byte[] img, byte[] subimg);
 	
 	private void connectToServer(String endereco, int PORTO) throws IOException {
-		System.out.println("Endereco = " + endereco);
 		socket = new Socket(endereco, PORTO);
-		System.out.println("Socket = " + socket);
-		
+		in = new ObjectInputStream(socket.getInputStream());
+		out = new ObjectOutputStream(socket.getOutputStream());	
 	}
 
 	public static void main(String[] args) {
