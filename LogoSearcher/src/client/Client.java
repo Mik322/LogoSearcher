@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Set;
 
@@ -23,7 +24,8 @@ public class Client extends Observable {
 	private static String OUTPUT_NAME = "OUT";
 	private File file;
 	
-	static final private int PORTO = 8080;
+	private final int PORTO;
+	private final String endereco;
 	
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
@@ -70,34 +72,34 @@ public class Client extends Observable {
 			out.writeObject(new Job(imgs, subimg, types));
 			out.flush();
 		} catch (IOException e) {}
-			
-			
 			try {
 				@SuppressWarnings("unchecked")
-				ArrayList<Point[]> results = (ArrayList<Point[]>) in.readObject();
+				HashMap<byte[], ArrayList<Point[]>> results = (HashMap<byte[], ArrayList<Point[]>>) in.readObject();
 			} catch (ClassNotFoundException e) {
 			} catch (IOException e) {}
 			
 			/*if (results.size()!=0) {
-				drawImage(results, imagem, n);
+				drawImage(results, imagem);
 				n++;
 			}*/
+			
+			/*String fileName = OUTPUT_NAME+"\\out" + n + ".png";
+			try {
+				ImageIO.write(imagem, "png", new File(fileName));
+			} catch (IOException e) {
+			}*/
+			
 		file = new File(OUTPUT_NAME);
 		setChanged();
 		notifyObservers(file);
 	}
 
-	private void drawImage(ArrayList<Point[]> results, BufferedImage imagem, int n) {
+	private void drawImage(ArrayList<Point[]> results, BufferedImage imagem) {
 		for (Point[] p: results) {
 			Graphics2D g2d = imagem.createGraphics();
 			g2d.setColor(Color.RED);
 			g2d.drawRect((int)p[0].getX(), (int)p[0].getY(), (int)(p[0].getX()-p[1].getX()), (int)(p[0].getY()-p[1].getY()));
 			g2d.dispose();
-		}
-		String fileName = OUTPUT_NAME+"\\out" + n + ".png";
-		try {
-			ImageIO.write(imagem, "png", new File(fileName));
-		} catch (IOException e) {
 		}
 	}
 
@@ -114,12 +116,14 @@ public class Client extends Observable {
 		return null;
 	}
 	
-	public Client() {
+	public Client(String endereco, int PORTO) {
+		this.endereco = endereco;
+		this.PORTO = PORTO;
 		runClient();
 	}
 
 	public static void main(String[] args) {
-		Client c = new Client();
+		Client c = new Client(args[0], Integer.parseInt(args[1]));
 		c.runClient();
 	}
 }
