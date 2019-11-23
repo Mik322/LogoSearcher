@@ -1,23 +1,26 @@
 package server.taskqueue;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import streamedobjects.Job;
+import streamedobjects.Task;
 
 public class TaskMap {
-	
+
 	private HashMap<String, TaskQueue> map = new HashMap<>();
-	
-	public void add(Job job) {
-		ArrayList<String> types = job.getTypes();
-		for(String t: types) {
-			map.get(t).push(job);
+
+	public synchronized void add(Task task) {
+		String type = task.getType();
+		map.get(type).push(task);
+	}
+
+	public synchronized void addType(String type) {
+		if (!map.containsKey(type)) {
+			map.put(type, new TaskQueue());
 		}
 	}
-	
-	public void addType(String type) {
-		map.put(type, new TaskQueue());
+
+	public TaskQueue getQueue(String type) {
+		return map.get(type);
 	}
-	
+
 }

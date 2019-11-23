@@ -1,22 +1,21 @@
 package streamedobjects;
 
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Job {
 	
 	private ArrayList<byte[]> imgs;
 	private byte[] subimg;
-	private ObjectOutputStream client;
-	private ArrayList<String> types;
+	private List<String> types;
 
-	public Job(ArrayList<byte[]> imgs, byte[] subimg, ArrayList<String> types) {
+	public Job(ArrayList<byte[]> imgs, byte[] subimg, List<String> types) {
 		this.imgs = imgs;
 		this.subimg = subimg;
 		this.types = types;
 	}
 
-	public ArrayList<String> getTypes() {
+	public List<String> getTypes() {
 		return types;
 	}
 
@@ -24,16 +23,7 @@ public class Job {
 		return subimg;
 	}
 
-	public ObjectOutputStream getClient() {
-		return client;
-	}
-
 	public ArrayList<byte[]> getImgs() {
 		return imgs;
 	}
-
-	public void setClient(ObjectOutputStream client) {
-		this.client = client;
-	}
-
 }

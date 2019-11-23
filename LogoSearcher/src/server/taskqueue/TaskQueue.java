@@ -2,14 +2,24 @@ package server.taskqueue;
 
 import java.util.LinkedList;
 
-import streamedobjects.Job;
+import streamedobjects.Task;
 
 public class TaskQueue {
 	
-	private LinkedList<Job> jobs = new LinkedList<>();
+	private LinkedList<Task> tasks = new LinkedList<>();
 
-	public void push(Job job) {
-		jobs.add(job);
+	public synchronized void push(Task task) {
+		tasks.add(task);
+		notifyAll();
+	}
+	
+	public synchronized Task pull() throws InterruptedException {
+		while(tasks.size()==0) {
+			wait();
+		}
+		Task task = tasks.poll();
+		notifyAll();
+		return task;
 	}
 	
 }

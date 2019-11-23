@@ -2,13 +2,16 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -23,6 +26,9 @@ public class GUI implements Observer {
 	private String dirOut;
 	private File jDir[];
 	private DefaultListModel<String> model = new DefaultListModel<>();
+	private DefaultListModel<String> typesOfWorkers = new DefaultListModel<>();
+	private List<String> types = new ArrayList<String>();
+
 
 	public GUI(Client c) {
 		frame = new JFrame("Interface");
@@ -73,6 +79,20 @@ public class GUI implements Observer {
 		JScrollPane listScroll = new JScrollPane(list);
 		frame.add(listScroll, BorderLayout.EAST);
 
+		JList<String> listOfTypes = new JList<>(typesOfWorkers);
+		listOfTypes.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (!e.getValueIsAdjusting()) {
+					
+					types = listOfTypes.getSelectedValuesList();
+					
+				}
+			}
+		});
+		JScrollPane listOfTypesScroll = new JScrollPane(listOfTypes);
+		frame.add(listOfTypesScroll, BorderLayout.WEST);
+		
 		JPanel panelButton = new JPanel();
 		panelButton.setLayout(new BorderLayout());
 
@@ -125,7 +145,7 @@ public class GUI implements Observer {
 		JButton procura = new JButton("procura");
 		procura.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				client.sendImages(jDir, logo, null);
+				client.sendImages(jDir, logo, types);
 			}
 		});
 		panel.add(procura, BorderLayout.SOUTH);
@@ -150,6 +170,13 @@ public class GUI implements Observer {
 		for (File f : imgs) {
 			model.addElement(f.getName());
 		}
+	}
+
+	public void writeSearchTypes(Set<String> types) {
+		for(String s: types) {
+			typesOfWorkers.addElement(s);
+		}
+		
 	}
 
 }
