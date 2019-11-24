@@ -1,11 +1,16 @@
 package workers;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import streamedobjects.Task;
 
@@ -74,6 +79,17 @@ public abstract class Worker extends Thread {
 		out = new ObjectOutputStream(socket.getOutputStream());	
 	}
 
+	
+	public static BufferedImage convertToImage(byte[] img) {
+		try {
+			InputStream in = new ByteArrayInputStream(img);
+			BufferedImage bImageFromConvert = ImageIO.read(in);
+			return bImageFromConvert;
+		} catch (Exception e) {
+		}
+		return null;
+	}
+	
 	public static void main(String[] args) {
 		if (args[2].equals("0")) {
 		new NormalWorker(args[0], Integer.parseInt(args[1]), args[2]);
