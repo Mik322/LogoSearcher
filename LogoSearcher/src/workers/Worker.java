@@ -91,8 +91,22 @@ public abstract class Worker extends Thread {
 	}
 	
 	public static void main(String[] args) {
-		if (args[2].equals("0")) {
-		new NormalWorker(args[0], Integer.parseInt(args[1]), args[2]);
+		switch(args[2]) {
+		case "normal":
+			new NormalWorker(args[0], Integer.parseInt(args[1]), args[2]);
+			break;
+		
+		case "90degrees":
+			new NoventaGrausWorker(args[0], Integer.parseInt(args[1]), args[2]);
+			break;
+			
+		case "180degrees":
+			new CentoEoitentaGrausWorker(args[0], Integer.parseInt(args[1]), args[2]);
+			break;
+			
+		default:
+			System.out.println("Type of Worker not available, try other type:");
+			main(args);
 		}
 	}
 	

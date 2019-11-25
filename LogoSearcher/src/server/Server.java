@@ -37,7 +37,7 @@ public class Server {
 	}
 
 	//Adiciona tipo de pesquisa ao map
-	public synchronized void addType(String type) {
+	public synchronized void addSearchType(String type) {
 		if (types.containsKey(type)) {
 			types.put(type, types.get(type)+1);
 		} else {

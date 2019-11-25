@@ -2,11 +2,7 @@ package workers;
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 
 	public class CentoEoitentaGrausWorker extends Worker {
 

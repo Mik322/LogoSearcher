@@ -24,7 +24,7 @@ public class DealWithWorker extends DealWith {
 	void serve() throws IOException {
 		try {
 			type = (String) in.readObject();
-			server.addType(type);
+			server.addSearchType(type);
 		} catch (ClassNotFoundException e) {}
 		while (true) {
 			try {
