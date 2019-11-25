@@ -19,6 +19,12 @@ public abstract class DealWith extends Thread {
 		this.out = out;
 	}
 	
+	public void run() {
+		try {
+			serve();
+		} catch (IOException e) {}
+	}
+	
 	abstract void serve() throws IOException;
 
 	public void sendToServer(Task task) {

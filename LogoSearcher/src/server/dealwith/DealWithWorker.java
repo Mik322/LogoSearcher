@@ -7,7 +7,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import server.Server;
-import streamedobjects.Result;
 import streamedobjects.Task;
 
 public class DealWithWorker extends DealWith {
@@ -34,8 +33,7 @@ public class DealWithWorker extends DealWith {
 				out.flush();
 				@SuppressWarnings("unchecked")
 				ArrayList<Point[]> points = (ArrayList<Point[]>) in.readObject(); //Recebe os pontos
-				Result result = new Result(task.getImg(), points); //Cria um resultado que contem os pontos e a imagem a que os resultados pertencem
-				task.getDwc().receiveResult(result); //Envia o resultado para o DWC correspondente
+				task.getDwc().receiveResult(task.getImg(), points); //Envia o resultado para o DWC correspondente
 			} catch (InterruptedException e) {
 			} catch (ClassNotFoundException e) {
 			}

@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 import server.Server;
 import streamedobjects.Job;
-import streamedobjects.Result;
 import streamedobjects.Task;
 
 public class DealWithClient extends DealWith {
@@ -60,8 +59,8 @@ public class DealWithClient extends DealWith {
 		}
 	}
 	
-	public synchronized void receiveResult(Result result) {
-		results.addResult(result.getImg(), result.getPoints());
+	public synchronized void receiveResult(byte[] img, ArrayList<Point[]> points) {
+		results.addResult(img, points);
 		notifyAll();
 	}
 	
