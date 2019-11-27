@@ -28,13 +28,12 @@ public class DealWithWorker extends DealWith {
 		} catch (ClassNotFoundException e) {}
 		while (true) {
 			try {
-				Task task = server.getQueue(type).pull();
+				Task task = server.getQueue(type).poll();
 				out.writeObject(task);
 				out.flush();
 				@SuppressWarnings("unchecked")
 				ArrayList<Point[]> points = (ArrayList<Point[]>) in.readObject(); //Recebe os pontos
 				task.getDwc().receiveResult(task.getImg(), points); //Envia o resultado para o DWC correspondente
-			} catch (InterruptedException e) {
 			} catch (ClassNotFoundException e) {
 			}
 		}

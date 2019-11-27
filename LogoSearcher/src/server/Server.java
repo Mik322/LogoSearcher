@@ -4,15 +4,17 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.HashMap;
 import java.util.Set;
-import server.taskqueue.TaskMap;
-import server.taskqueue.TaskQueue;
+
+import server.objects.BlockingQueue;
+import server.objects.TaskMap;
+import server.objects.threadpool.Handler;
+import server.objects.threadpool.ThreadPool;
 import streamedobjects.Task;
 
 public class Server {
 
 	private static final int PORTO = 8080;
-	//private final ExecutorService pool = Executors.newFixedThreadPool(2);
-	private final ThreadPool pool2 = new ThreadPool(2);
+	private final ThreadPool pool = new ThreadPool(2);
 	private TaskMap tasks = new TaskMap();
 	private HashMap<String, Integer> types = new HashMap<>();
 	
@@ -21,11 +23,11 @@ public class Server {
 		System.out.println("Lançou ServerSocket: " + s);
 		try {
 			while (true) {
-				pool2.execute(new Handler(s.accept(),this));
+				pool.execute(new Handler(s.accept(),this));
 			}
 
 		} finally {
-			pool2.shutdown();
+			pool.shutdown();
 			s.close();
 		}
 	}
@@ -40,8 +42,8 @@ public class Server {
 			types.put(type, types.get(type)+1);
 		} else {
 			types.put(type, 1);
+			tasks.addType(type);
 		}
-		tasks.addType(type);
 	}
 
 	public Set<String> getTypesAvailable() {
@@ -59,7 +61,7 @@ public class Server {
 
 	}
 
-	public TaskQueue getQueue(String type) {
+	public BlockingQueue<Task> getQueue(String type) {
 		return tasks.getQueue(type);
 	}
 

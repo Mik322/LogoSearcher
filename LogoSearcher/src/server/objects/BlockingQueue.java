@@ -1,4 +1,4 @@
-package server;
+package server.objects;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -6,31 +6,26 @@ import java.util.Queue;
 public class BlockingQueue<T> {
 	
 	private Queue<T> queue;
-	int capacity = -1;
 	
 	public BlockingQueue() {
 		this.queue = new LinkedList<T>();
 	}
 	
-	public synchronized void offer(T t) throws InterruptedException {
-		while(capacity != -1 && getSize() == capacity) {
-			wait();
-		}
-		notifyAll();
+	public synchronized void offer(T t) {
 		queue.add(t);
+		notifyAll();
 	}
 
 	public synchronized T poll() {
-		while(getSize()==0 && capacity != -1) {
+		while(getSize()==0) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
+		T t = queue.poll();
 		notifyAll();
-		return queue.poll();
+		return t;
 	}
 
 	public int getSize() {
