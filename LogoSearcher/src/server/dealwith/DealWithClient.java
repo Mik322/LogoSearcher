@@ -54,8 +54,6 @@ public class DealWithClient extends DealWith {
 		try {
 			out.writeObject(results.resultsMap);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
