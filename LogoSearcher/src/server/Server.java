@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import server.taskqueue.TaskMap;
 import server.taskqueue.TaskQueue;
 import streamedobjects.Task;
@@ -14,7 +11,8 @@ import streamedobjects.Task;
 public class Server {
 
 	private static final int PORTO = 8080;
-	private final ExecutorService pool = Executors.newFixedThreadPool(2);
+	//private final ExecutorService pool = Executors.newFixedThreadPool(2);
+	private final ThreadPool pool2 = new ThreadPool(2);
 	private TaskMap tasks = new TaskMap();
 	private HashMap<String, Integer> types = new HashMap<>();
 	
@@ -23,11 +21,11 @@ public class Server {
 		System.out.println("Lançou ServerSocket: " + s);
 		try {
 			while (true) {
-				pool.execute(new Handler(s.accept(),this));
+				pool2.execute(new Handler(s.accept(),this));
 			}
 
 		} finally {
-			pool.shutdown();
+			pool2.shutdown();
 			s.close();
 		}
 	}
