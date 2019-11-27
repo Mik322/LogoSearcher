@@ -53,8 +53,8 @@ public class Client extends Observable {
 	}
 
 	private void doConections() throws IOException {
-		InetAddress endereco = InetAddress.getByName(null);
-		socket = new Socket(endereco, PORTO);
+		InetAddress server = InetAddress.getByName(endereco);
+		socket = new Socket(server, PORTO);
 		in = new ObjectInputStream(socket.getInputStream());
 		out = new ObjectOutputStream(socket.getOutputStream());
 	}
