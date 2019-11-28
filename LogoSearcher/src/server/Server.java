@@ -13,11 +13,15 @@ import streamedobjects.Task;
 
 public class Server {
 
-	private static final int PORTO = 8080;
+	private final int PORTO;
 	private final ThreadPool pool = new ThreadPool(2);
 	private TaskMap tasks = new TaskMap();
 	private HashMap<String, Integer> types = new HashMap<>();
 	
+	public Server(String port) {
+		PORTO = Integer.parseInt(port);
+	}
+
 	public void startServing() throws IOException {
 		ServerSocket s = new ServerSocket(PORTO);
 		System.out.println("Lançou ServerSocket: " + s);
@@ -53,7 +57,7 @@ public class Server {
 	public static void main(String[] args) {
 
 		try {
-			Server server = new Server();
+			Server server = new Server(args[0]);
 			server.startServing();
 		} catch (IOException e) {
 
