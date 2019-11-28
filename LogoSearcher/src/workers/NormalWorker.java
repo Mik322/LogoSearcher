@@ -33,11 +33,9 @@ public class NormalWorker extends Worker {
 		for (int i = 0; i != imagem.getWidth() - subimagem.getWidth(); i++) {
 			for (int j = 0; j != imagem.getHeight() - subimagem.getHeight(); j++) {
 				if (imagem.getRGB(i, j) == subimagem.getRGB(0, 0) && procuraSub(imagem, subimagem, i, j)) {
-					Point cordinates[] = new Point[2];
-					cordinates[0].x = i;
-					cordinates[0].y = j;
-					cordinates[1].x = i + subimagem.getWidth();
-					cordinates[1].y = j + subimagem.getHeight();
+					Point[] cordinates = new Point[2];
+					cordinates[0] = new Point(i,j);
+					cordinates[1] = new Point(i + subimagem.getWidth(),j + subimagem.getHeight());
 					results.add(cordinates);
 				}
 			}

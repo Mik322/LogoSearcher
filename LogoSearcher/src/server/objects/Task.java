@@ -1,15 +1,9 @@
-package streamedobjects;
-
-import java.io.Serializable;
+package server.objects;
 
 import server.dealwith.DealWithClient;
 
-public class Task implements Serializable{
+public class Task{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private byte[]img;
 	private byte[]subimg;
 	

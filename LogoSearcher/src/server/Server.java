@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import server.objects.BlockingQueue;
+import server.objects.Task;
 import server.objects.TaskMap;
 import server.objects.threadpool.Handler;
 import server.objects.threadpool.ThreadPool;
-import streamedobjects.Task;
 
 public class Server {
 
@@ -48,7 +48,6 @@ public class Server {
 			types.put(type, 1);
 			tasks.addType(type);
 		}
-		System.out.println(types.keySet().toString());
 	}
 
 	public ArrayList<String> getTypesAvailable() {

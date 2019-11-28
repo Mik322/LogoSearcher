@@ -7,7 +7,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import server.Server;
-import streamedobjects.Task;
+import server.objects.Task;
 
 public class DealWithWorker extends DealWith {
 	
@@ -29,7 +29,9 @@ public class DealWithWorker extends DealWith {
 		while (true) {
 			try {
 				Task task = server.getQueue(type).poll();
-				out.writeObject(task);
+				out.writeObject(task.getImg());
+				out.flush();
+				out.writeObject(task.getSubimg());
 				out.flush();
 				@SuppressWarnings("unchecked")
 				ArrayList<Point[]> points = (ArrayList<Point[]>) in.readObject(); //Recebe os pontos

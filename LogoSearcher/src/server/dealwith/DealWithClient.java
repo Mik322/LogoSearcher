@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import server.Server;
+import server.objects.Task;
 import streamedobjects.Job;
-import streamedobjects.Task;
 
 public class DealWithClient extends DealWith {
 
@@ -82,7 +82,7 @@ public class DealWithClient extends DealWith {
 			for (Point[] p : points) {
 				resultsMap.get(img).add(p);
 			}
-			notifyAll();
+			System.out.println(resultsMap.toString());
 		}
 	}
 

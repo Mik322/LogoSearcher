@@ -7,12 +7,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-
-import streamedobjects.Task;
 
 public abstract class Worker extends Thread {
 
@@ -40,7 +39,7 @@ public abstract class Worker extends Thread {
 			out.flush();
 			recieveAndExecute();
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		} finally {
 			System.out.println("a fechar...");
 			try {
@@ -55,16 +54,18 @@ public abstract class Worker extends Thread {
 		try {
 			while (true) {
 				try {
-					Task task = (Task) in.readObject();
-					ArrayList<Point[]> results = procura(task.getImg(), task.getSubimg());
+					byte[] img = (byte[]) in.readObject();
+					byte[] subimg = (byte[]) in.readObject();
+					ArrayList<Point[]> results = procura(img, subimg);
 					out.writeObject(results);
 					out.flush();
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		} catch (IOException e) {
+			System.out.println("In receiveandExecute()");
+			e.printStackTrace();
 		}
 
 	}
@@ -72,7 +73,8 @@ public abstract class Worker extends Thread {
 	public abstract ArrayList<Point[]> procura(byte[] img, byte[] subimg);
 
 	private void connectToServer(String endereco, int PORTO) throws IOException {
-		socket = new Socket(endereco, PORTO);
+		InetAddress server = InetAddress.getByName(endereco);
+		socket = new Socket(server, PORTO);
 		in = new ObjectInputStream(socket.getInputStream());
 		out = new ObjectOutputStream(socket.getOutputStream());
 	}
@@ -83,6 +85,7 @@ public abstract class Worker extends Thread {
 			BufferedImage bImageFromConvert = ImageIO.read(in);
 			return bImageFromConvert;
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}

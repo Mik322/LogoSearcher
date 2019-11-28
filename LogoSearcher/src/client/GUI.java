@@ -89,6 +89,7 @@ public class GUI implements Observer {
 		frame.add(listScroll, BorderLayout.EAST);
 
 		JList<String> listOfTypes = new JList<>(typesOfWorkers);
+		listOfTypes.setFixedCellWidth(100);
 		listOfTypes.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {

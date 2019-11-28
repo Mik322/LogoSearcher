@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import server.Server;
-import streamedobjects.Task;
+import server.objects.Task;
 
 public abstract class DealWith extends Thread {
 	

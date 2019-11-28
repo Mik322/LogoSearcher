@@ -2,8 +2,6 @@ package server.objects;
 
 import java.util.HashMap;
 
-import streamedobjects.Task;
-
 public class TaskMap {
 
 	private HashMap<String, BlockingQueue<Task>> map = new HashMap<>();
