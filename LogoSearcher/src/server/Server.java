@@ -2,8 +2,8 @@ package server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 import server.objects.BlockingQueue;
 import server.objects.TaskMap;
@@ -48,10 +48,15 @@ public class Server {
 			types.put(type, 1);
 			tasks.addType(type);
 		}
+		System.out.println(types.keySet().toString());
 	}
 
-	public Set<String> getTypesAvailable() {
-		return types.keySet();
+	public ArrayList<String> getTypesAvailable() {
+		ArrayList<String> typesList = new ArrayList<>();
+		for (String t : types.keySet()) {
+			typesList.add(t);
+		}
+		return typesList;
 	}
 	
 	public static void main(String[] args) {

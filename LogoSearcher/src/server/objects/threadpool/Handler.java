@@ -20,10 +20,12 @@ public class Handler implements Runnable {
 	@Override
 	public void run() {
 		try {
+			System.out.println("nova conexao");
 			ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(s.getInputStream());
 			int type = in.readInt();
 			if (type == CLIENT) {
+				System.out.println("É cliente");
 				new DealWithClient(server, in, out).start();
 			} else if (type == WORKER) {
 				new DealWithWorker(server, in, out).start();

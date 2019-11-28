@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
-import java.util.Set;
 
 import javax.imageio.ImageIO;
 
@@ -45,7 +44,7 @@ public class Client extends Observable {
 			this.addObserver(window);
 			window.open();
 			@SuppressWarnings("unchecked")
-			Set<String> types = (Set<String>) in.readObject();
+			ArrayList<String> types = (ArrayList<String>) in.readObject();
 			window.writeSearchTypes(types); // Vai escrever os tipos de pesquisa disponoveis
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -136,7 +135,6 @@ public class Client extends Observable {
 	public Client(String endereco, int PORTO) {
 		this.endereco = endereco;
 		this.PORTO = PORTO;
-		runClient();
 	}
 
 	public static void main(String[] args) {

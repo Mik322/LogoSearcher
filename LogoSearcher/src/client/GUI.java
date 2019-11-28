@@ -2,19 +2,28 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Set;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -172,7 +181,7 @@ public class GUI implements Observer {
 		}
 	}
 
-	public void writeSearchTypes(Set<String> types) {
+	public void writeSearchTypes(ArrayList<String> types) {
 		for(String s: types) {
 			typesOfWorkers.addElement(s);
 		}

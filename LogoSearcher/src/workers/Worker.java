@@ -14,7 +14,6 @@ import javax.imageio.ImageIO;
 
 import streamedobjects.Task;
 
-
 public abstract class Worker extends Thread {
 
 	private Socket socket;
@@ -23,24 +22,23 @@ public abstract class Worker extends Thread {
 	private String endereco;
 	private int PORTO;
 	private Object typeOfWorker;
-	
+
 	private static final int WORKER = 2;
-	
-	
+
 	public Worker(String endereco, int PORTO, String typeOfWorker) {
 		this.endereco = endereco;
 		this.PORTO = PORTO;
 		this.typeOfWorker = typeOfWorker;
 	}
-	
+
 	public void runClient() {
 		try {
 			connectToServer(endereco, PORTO);
-	        out.writeInt(WORKER);
-	        out.flush();
-	        out.writeObject(typeOfWorker);
-	        out.flush();
-	        recieveAndExecute();
+			out.writeInt(WORKER);
+			out.flush();
+			out.writeObject(typeOfWorker);
+			out.flush();
+			recieveAndExecute();
 		} catch (Exception e) {
 
 		} finally {
@@ -52,34 +50,33 @@ public abstract class Worker extends Thread {
 			}
 		}
 	}
-	
+
 	private void recieveAndExecute() {
-		while(true) {
-			try {
-				Task task = (Task) in.readObject();
-				ArrayList<Point[]> results = procura(task.getImg(), task.getSubimg());
-				out.writeObject(results);
-				out.flush();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		try {
+			while (true) {
+				try {
+					Task task = (Task) in.readObject();
+					ArrayList<Point[]> results = procura(task.getImg(), task.getSubimg());
+					out.writeObject(results);
+					out.flush();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+		} catch (IOException e) {
 		}
-		
+
 	}
 
 	public abstract ArrayList<Point[]> procura(byte[] img, byte[] subimg);
-	
+
 	private void connectToServer(String endereco, int PORTO) throws IOException {
 		socket = new Socket(endereco, PORTO);
 		in = new ObjectInputStream(socket.getInputStream());
-		out = new ObjectOutputStream(socket.getOutputStream());	
+		out = new ObjectOutputStream(socket.getOutputStream());
 	}
 
-	
 	public static BufferedImage convertToImage(byte[] img) {
 		try {
 			InputStream in = new ByteArrayInputStream(img);
@@ -89,25 +86,25 @@ public abstract class Worker extends Thread {
 		}
 		return null;
 	}
-	
+
 	public static void main(String[] args) {
-		switch(args[2]) {
+		switch (args[2]) {
 		case "normal":
 			new NormalWorker(args[0], Integer.parseInt(args[1]), args[2]);
 			break;
-		
+
 		case "90degrees":
 			new NoventaGrausWorker(args[0], Integer.parseInt(args[1]), args[2]);
 			break;
-			
+
 		case "180degrees":
 			new CentoEoitentaGrausWorker(args[0], Integer.parseInt(args[1]), args[2]);
 			break;
-			
+
 		default:
 			System.out.println("Type of Worker not available, try other type:");
 			main(args);
 		}
 	}
-	
+
 }
