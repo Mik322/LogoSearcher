@@ -18,7 +18,8 @@ public class DealWithWorker extends DealWith {
 		super(server,in,out);
 		try {
 			serve();
-		} catch (IOException e) {}
+		} catch (IOException e) {
+		} 
 	}
 	
 	@Override
