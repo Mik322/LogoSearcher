@@ -61,10 +61,12 @@ public class Client extends Observable {
 	public void sendImages(File[] imagensDir, BufferedImage subimagem, List<String> types) {
 		byte[] subimg = convertToByteArray(subimagem);
 		ArrayList<byte[]> imgs = new ArrayList<>();
+		ArrayList<BufferedImage> buffImgs = new ArrayList<>();
 
 		for (File f : imagensDir) {
 			try {
 				BufferedImage imagem = ImageIO.read(f);
+				buffImgs.add(imagem);
 				byte[] img = convertToByteArray(imagem);
 				imgs.add(img);
 			} catch (Exception e) {
@@ -76,20 +78,19 @@ public class Client extends Observable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		receiveResults(imgs);
+		receiveResults(buffImgs);
 	}
 
-	private void receiveResults(ArrayList<byte[]> imgs) {
+	private void receiveResults(ArrayList<BufferedImage> buffImgs) {
 		int n = 0;
 		try {
 			@SuppressWarnings("unchecked")
 			HashMap<Integer, ArrayList<Point[]>> results = (HashMap<Integer, ArrayList<Point[]>>) in.readObject();
-			for (int i=0; i!= imgs.size(); i++) {
+			for (int i=0; i!= buffImgs.size(); i++) {
 				if (results.get(new Integer(i)).size() != 0) {
-					BufferedImage img = convertToImage(imgs.get(new Integer(i)));
-					drawImage(results.get(new Integer(i)), img);
+					drawImage(results.get(new Integer(i)), buffImgs.get(new Integer(i)));
 					String fileName = OUTPUT_NAME + "\\out" + ++n + ".png";
-					ImageIO.write(img, "png", new File(fileName));
+					ImageIO.write(buffImgs.get(new Integer(i)), "png", new File(fileName));
 				}
 			}
 		} catch (ClassNotFoundException e) {
@@ -120,16 +121,6 @@ public class Client extends Observable {
 			baos.close();
 			return bImg;
 		} catch (IOException e) {
-		}
-		return null;
-	}
-
-	private BufferedImage convertToImage(byte[] img) {
-		try {
-			InputStream in = new ByteArrayInputStream(img);
-			BufferedImage bImageFromConvert = ImageIO.read(in);
-			return bImageFromConvert;
-		} catch (Exception e) {
 		}
 		return null;
 	}
