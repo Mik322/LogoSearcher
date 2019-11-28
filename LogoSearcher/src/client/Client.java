@@ -4,11 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -16,15 +14,15 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Observable;
 
 import javax.imageio.ImageIO;
 
 import streamedobjects.Job;
 
-public class Client extends Observable {
+public class Client{
 	private static String OUTPUT_NAME = "OUT";
 	private File file;
+	private GUI window;
 
 	private final int PORTO;
 	private final String endereco;
@@ -40,8 +38,7 @@ public class Client extends Observable {
 			doConections();
 			out.writeInt(CLIENT);
 			out.flush();
-			GUI window = new GUI(this);
-			this.addObserver(window);
+			window = new GUI(this);
 			window.open();
 			@SuppressWarnings("unchecked")
 			ArrayList<String> types = (ArrayList<String>) in.readObject();
@@ -78,38 +75,7 @@ public class Client extends Observable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		receiveResults(buffImgs);
-	}
-
-	private void receiveResults(ArrayList<BufferedImage> buffImgs) {
-		int n = 0;
-		try {
-			@SuppressWarnings("unchecked")
-			HashMap<Integer, ArrayList<Point[]>> results = (HashMap<Integer, ArrayList<Point[]>>) in.readObject();
-			for (int i=0; i!= buffImgs.size(); i++) {
-				if (results.get(new Integer(i)).size() != 0) {
-					drawImage(results.get(new Integer(i)), buffImgs.get(new Integer(i)));
-					String fileName = OUTPUT_NAME + "\\out" + ++n + ".png";
-					ImageIO.write(buffImgs.get(new Integer(i)), "png", new File(fileName));
-				}
-			}
-		} catch (ClassNotFoundException e) {
-		} catch (IOException e) {
-		}
-		file = new File(OUTPUT_NAME);
-		setChanged();
-		notifyObservers(file);
-	}
-
-	private void drawImage(ArrayList<Point[]> results, BufferedImage imagem) {
-		for (Point[] p : results) {
-			Graphics2D g2d = imagem.createGraphics();
-			g2d.setColor(Color.RED);
-			g2d.drawRect((int) p[0].getX(), (int) p[0].getY(),
-					(int) (p[1].getX() - p[0].getX()), 
-					(int) (p[1].getY() - p[0].getY()));
-			g2d.dispose();
-		}
+		new ReceiveResults(buffImgs).start();
 	}
 
 	private byte[] convertToByteArray(BufferedImage img) {
@@ -125,6 +91,43 @@ public class Client extends Observable {
 		return null;
 	}
 
+	private class ReceiveResults extends Thread {
+		private ArrayList<BufferedImage> buffImgs;
+		private ReceiveResults(ArrayList<BufferedImage> buffImgs) {
+			this.buffImgs = buffImgs;
+		}
+		public void run() {
+			int n = 0;
+			try {
+				@SuppressWarnings("unchecked")
+				HashMap<Integer, ArrayList<Point[]>> results = (HashMap<Integer, ArrayList<Point[]>>) in.readObject();
+				for (int i=0; i!= buffImgs.size(); i++) {
+					if (results.get(new Integer(i)).size() != 0) {
+						drawImage(results.get(new Integer(i)), buffImgs.get(new Integer(i)));
+						String fileName = OUTPUT_NAME + "\\out" + ++n + ".png";
+						ImageIO.write(buffImgs.get(new Integer(i)), "png", new File(fileName));
+					}
+				}
+			} catch (ClassNotFoundException e) {
+			} catch (IOException e) {
+			}
+			file = new File(OUTPUT_NAME);
+			window.update(file);;
+		}
+		
+		private void drawImage(ArrayList<Point[]> results, BufferedImage imagem) {
+			for (Point[] p : results) {
+				Graphics2D g2d = imagem.createGraphics();
+				g2d.setColor(Color.RED);
+				g2d.drawRect((int) p[0].getX(), (int) p[0].getY(),
+						(int) (p[1].getX() - p[0].getX()), 
+						(int) (p[1].getY() - p[0].getY()));
+				g2d.dispose();
+			}
+		}
+	}
+	
+	
 	public Client(String endereco, int PORTO) {
 		this.endereco = endereco;
 		this.PORTO = PORTO;

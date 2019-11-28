@@ -9,8 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
@@ -28,7 +26,7 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class GUI implements Observer {
+public class GUI{
 
 	private JFrame frame;
 	private Client client;
@@ -174,9 +172,7 @@ public class GUI implements Observer {
 	}
 
 	// Quando o cliente recebe um resultado de pesquisa vai ativar este procedimento
-	@Override
-	public void update(Observable o, Object arg) {
-		File file = (File) arg;
+	public void update(File file) {
 		dirOut = file.getAbsolutePath();
 		File[] imgs = file.listFiles();
 		for (File f : imgs) {
