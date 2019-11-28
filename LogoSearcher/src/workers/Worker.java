@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import streamedobjects.SearchTask;
+
 public abstract class Worker extends Thread {
 
 	private Socket socket;
@@ -54,9 +56,8 @@ public abstract class Worker extends Thread {
 		try {
 			while (true) {
 				try {
-					byte[] img = (byte[]) in.readObject();
-					byte[] subimg = (byte[]) in.readObject();
-					ArrayList<Point[]> results = procura(img, subimg);
+					SearchTask sT= (SearchTask) in.readObject(); 
+					ArrayList<Point[]> results = procura(sT.getImg(), sT.getSubimg());
 					out.writeObject(results);
 					out.flush();
 				} catch (ClassNotFoundException e) {
@@ -64,7 +65,6 @@ public abstract class Worker extends Thread {
 				}
 			}
 		} catch (IOException e) {
-			System.out.println("In receiveandExecute()");
 			e.printStackTrace();
 		}
 
