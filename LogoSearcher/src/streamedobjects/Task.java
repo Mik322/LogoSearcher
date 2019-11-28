@@ -1,9 +1,15 @@
 package streamedobjects;
 
+import java.io.Serializable;
+
 import server.dealwith.DealWithClient;
 
-public class Task {
+public class Task implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private byte[]img;
 	private byte[]subimg;
 	

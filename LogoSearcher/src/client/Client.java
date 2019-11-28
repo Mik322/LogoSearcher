@@ -74,6 +74,7 @@ public class Client extends Observable {
 			out.writeObject(new Job(imgs, subimg, types));
 			out.flush();
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		receiveResults();
 	}

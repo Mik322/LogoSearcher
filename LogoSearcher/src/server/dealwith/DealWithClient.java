@@ -20,17 +20,17 @@ public class DealWithClient extends DealWith {
 		try {
 			serve();
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
 	@Override
 	void serve() throws IOException {
-		System.out.println("Conectado a novo cliente");
 		out.writeObject(server.getTypesAvailable());
 		out.flush();
 		while (true) {
 			try {
-				Job job = (Job) super.in.readObject();
+				Job job = (Job) in.readObject();
 				results = new Results(job.getTypes().size(), job.getImgs().size());
 				for (byte[] img : job.getImgs()) {
 					results.createEntry(img);
@@ -38,9 +38,9 @@ public class DealWithClient extends DealWith {
 						sendToServer(new Task(img, job.getSubimg(), this, t));
 					}
 				}
-				waitResults();
 			} catch (ClassNotFoundException e) {
 			}
+			waitResults();
 		}
 	}
 
@@ -82,6 +82,7 @@ public class DealWithClient extends DealWith {
 			for (Point[] p : points) {
 				resultsMap.get(img).add(p);
 			}
+			notifyAll();
 		}
 	}
 
