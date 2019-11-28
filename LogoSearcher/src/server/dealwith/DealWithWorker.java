@@ -16,12 +16,6 @@ public class DealWithWorker extends DealWith {
 	
 	public DealWithWorker(Server server, ObjectInputStream in, ObjectOutputStream out) {
 		super(server,in,out);
-		try {
-			serve();
-		} catch (IOException e) {
-		}  finally {
-			server.eliminateWorker(type);
-		}
 	}
 	
 	@Override

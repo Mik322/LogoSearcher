@@ -17,11 +17,6 @@ public class DealWithClient extends DealWith {
 
 	public DealWithClient(Server server, ObjectInputStream in, ObjectOutputStream out) {
 		super(server, in, out);
-		try {
-			serve();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override

@@ -22,7 +22,9 @@ public abstract class DealWith extends Thread {
 	public void run() {
 		try {
 			serve();
-		} catch (IOException e) {}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	abstract void serve() throws IOException;

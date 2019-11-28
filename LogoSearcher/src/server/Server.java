@@ -14,7 +14,7 @@ import server.objects.threadpool.ThreadPool;
 public class Server {
 
 	private final int PORTO;
-	private final ThreadPool pool = new ThreadPool(5);
+	private final ThreadPool pool = new ThreadPool(2);
 	private TaskMap tasks = new TaskMap();
 	private HashMap<String, Integer> types = new HashMap<>();
 	
