@@ -15,7 +15,7 @@ import java.util.ArrayList;
 		boolean result = true;
 		for (int i = 0; i != subimagem.getHeight(); i++) {
 			for (int j = 0; j != subimagem.getWidth(); j++) {
-				result = (imagem.getRGB(i + sX, j + sY) == subimagem.getRGB(subimagem.getHeight()-j, i));
+				result = (imagem.getRGB(sX+j, sY-i) == subimagem.getRGB(i, j));
 				if (!result) {
 					return result;
 				}
@@ -29,13 +29,11 @@ import java.util.ArrayList;
 		BufferedImage subimagem = convertToImage(subimg);
 		ArrayList<Point[]> results = new ArrayList<>();
 		for (int i = 0; i != imagem.getWidth() - subimagem.getHeight(); i++) {
-			for (int j = 0; j != imagem.getHeight() - subimagem.getWidth(); j++) {
-				if (imagem.getRGB(i, j) == subimagem.getRGB(0, subimagem.getHeight()) && procuraSub(imagem, subimagem, i, j)) {
+			for (int j = subimagem.getWidth(); j != imagem.getHeight(); j++) {
+				if (imagem.getRGB(i, j) == subimagem.getRGB(0, 0) && procuraSub(imagem, subimagem, i, j)) {
 					Point cordinates[] = new Point[2];
-					cordinates[0].x = i;
-					cordinates[0].y = j;
-					cordinates[1].x = i + subimagem.getHeight();
-					cordinates[1].y = j + subimagem.getWidth();
+					cordinates[0] = new Point(i, j-subimagem.getWidth());
+					cordinates[1] = new Point(i+subimagem.getHeight(), j);
 					results.add(cordinates);
 				}
 			}
