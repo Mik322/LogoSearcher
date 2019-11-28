@@ -23,6 +23,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -90,6 +91,7 @@ public class GUI implements Observer {
 
 		JList<String> listOfTypes = new JList<>(typesOfWorkers);
 		listOfTypes.setFixedCellWidth(100);
+		listOfTypes.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		listOfTypes.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {

@@ -19,7 +19,9 @@ public class DealWithWorker extends DealWith {
 		try {
 			serve();
 		} catch (IOException e) {
-		} 
+		}  finally {
+			server.eliminateWorker(type);
+		}
 	}
 	
 	@Override

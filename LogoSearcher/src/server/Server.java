@@ -14,7 +14,7 @@ import server.objects.threadpool.ThreadPool;
 public class Server {
 
 	private final int PORTO;
-	private final ThreadPool pool = new ThreadPool(2);
+	private final ThreadPool pool = new ThreadPool(5);
 	private TaskMap tasks = new TaskMap();
 	private HashMap<String, Integer> types = new HashMap<>();
 	
@@ -71,6 +71,15 @@ public class Server {
 
 	public BlockingQueue<Task> getQueue(String type) {
 		return tasks.getQueue(type);
+	}
+
+	public void eliminateWorker(String type) {
+		if (types.containsKey(type)) {
+			if (types.get(type)>1)
+				types.put(type,types.get(type)-1);
+			else
+				types.remove(type);
+		}
 	}
 
 
