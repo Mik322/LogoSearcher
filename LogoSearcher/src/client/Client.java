@@ -104,8 +104,9 @@ public class Client extends Observable {
 		for (Point[] p : results) {
 			Graphics2D g2d = imagem.createGraphics();
 			g2d.setColor(Color.RED);
-			g2d.drawRect((int) p[0].getX(), (int) p[0].getY(), (int) (p[0].getX() - (int) p[1].getX()),
-					(int) (p[0].getY() - (int) p[1].getY()));
+			g2d.drawRect((int) p[0].getX(), (int) p[0].getY(),
+					(int) (p[1].getX() - p[0].getX()), 
+					(int) (p[1].getY() - p[0].getY()));
 			g2d.dispose();
 		}
 	}

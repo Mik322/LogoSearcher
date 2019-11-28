@@ -82,7 +82,6 @@ public class DealWithClient extends DealWith {
 			for (Point[] p : points) {
 				resultsMap.get(img).add(p);
 			}
-			System.out.println(resultsMap.toString());
 		}
 	}
 
