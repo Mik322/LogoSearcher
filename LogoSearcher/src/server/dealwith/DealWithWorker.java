@@ -31,7 +31,7 @@ public class DealWithWorker extends DealWith {
 				out.flush();
 				@SuppressWarnings("unchecked")
 				ArrayList<Point[]> points = (ArrayList<Point[]>) in.readObject(); //Recebe os pontos
-				task.getDwc().receiveResult(task.getImg(), points); //Envia o resultado para o DWC correspondente
+				task.getDwc().receiveResult(task.getIndex(), points); //Envia o resultado para o DWC correspondente
 			} catch (ClassNotFoundException e) {
 			}
 		}

@@ -76,18 +76,18 @@ public class Client extends Observable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		receiveResults();
+		receiveResults(imgs);
 	}
 
-	private void receiveResults() {
+	private void receiveResults(ArrayList<byte[]> imgs) {
 		int n = 0;
 		try {
 			@SuppressWarnings("unchecked")
-			HashMap<byte[], ArrayList<Point[]>> results = (HashMap<byte[], ArrayList<Point[]>>) in.readObject();
-			for (byte[] i : results.keySet()) {
-				if (results.get(i).size() != 0) {
-					BufferedImage img = convertToImage(i);
-					drawImage(results.get(i), img);
+			HashMap<Integer, ArrayList<Point[]>> results = (HashMap<Integer, ArrayList<Point[]>>) in.readObject();
+			for (int i=0; i!= imgs.size(); i++) {
+				if (results.get(new Integer(i)).size() != 0) {
+					BufferedImage img = convertToImage(imgs.get(new Integer(i)));
+					drawImage(results.get(new Integer(i)), img);
 					String fileName = OUTPUT_NAME + "\\out" + ++n + ".png";
 					ImageIO.write(img, "png", new File(fileName));
 				}

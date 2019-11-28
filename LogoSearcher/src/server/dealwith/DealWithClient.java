@@ -27,11 +27,13 @@ public class DealWithClient extends DealWith {
 			try {
 				Job job = (Job) in.readObject();
 				results = new Results(job.getTypes().size(), job.getImgs().size());
+				int index = 0;
 				for (byte[] img : job.getImgs()) {
-					results.createEntry(img);
+					results.createEntry(index);
 					for (String t : job.getTypes()) {
-						sendToServer(new Task(img, job.getSubimg(), this, t));
+						sendToServer(new Task(img, job.getSubimg(), this, t, index));
 					}
+					index++;
 				}
 			} catch (ClassNotFoundException e) {
 			}
@@ -53,13 +55,13 @@ public class DealWithClient extends DealWith {
 		}
 	}
 
-	public synchronized void receiveResult(byte[] img, ArrayList<Point[]> points) {
-		results.addResult(img, points);
+	public synchronized void receiveResult(int imgIndex, ArrayList<Point[]> points) {
+		results.addResult(imgIndex, points);
 		notifyAll();
 	}
 
 	private class Results {
-		private HashMap<byte[], ArrayList<Point[]> > resultsMap = new HashMap<>();
+		private HashMap<Integer, ArrayList<Point[]> > resultsMap = new HashMap<>();
 		private int numReceived;
 		private int expectedResultsNum;
 
@@ -68,14 +70,14 @@ public class DealWithClient extends DealWith {
 			expectedResultsNum = numTypes * numImages;
 		}
 
-		private void createEntry(byte[] img) {
-			resultsMap.put(img, new ArrayList<>());
+		private void createEntry(int imgIndex) {
+			resultsMap.put(new Integer(imgIndex), new ArrayList<>());
 		}
 
-		private void addResult(byte[] img, ArrayList<Point[]> points) {
+		private void addResult(int index, ArrayList<Point[]> points) {
 			numReceived++;
 			for (Point[] p : points) {
-				resultsMap.get(img).add(p);
+				resultsMap.get(new Integer(index)).add(p);
 			}
 		}
 	}
