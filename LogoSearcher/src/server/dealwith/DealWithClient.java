@@ -105,6 +105,7 @@ public class DealWithClient extends DealWith {
 	public void sendTypes(ArrayList<String> typesAvailable) {
 		try {
 			out.writeObject(typesAvailable);
+			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
