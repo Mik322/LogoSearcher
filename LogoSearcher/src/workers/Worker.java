@@ -32,7 +32,7 @@ public abstract class Worker extends Thread {
 		this.typeOfWorker = typeOfWorker;
 	}
 
-	public void runClient() {
+	public void runWorker() {
 		try {
 			connectToServer(endereco, PORTO);
 			out.writeInt(WORKER);
@@ -40,7 +40,7 @@ public abstract class Worker extends Thread {
 			out.writeObject(typeOfWorker);
 			out.flush();
 			recieveAndExecute();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			System.out.println("a fechar...");
@@ -65,7 +65,7 @@ public abstract class Worker extends Thread {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			runWorker();
 		}
 
 	}

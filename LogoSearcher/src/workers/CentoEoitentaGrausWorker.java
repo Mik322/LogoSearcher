@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 		CentoEoitentaGrausWorker(String socket, int PORTO, String typeOfWorker){
 		super(socket, PORTO, typeOfWorker);
-		runClient();
+		runWorker();
 	}
 
 	

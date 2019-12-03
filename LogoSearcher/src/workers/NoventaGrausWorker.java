@@ -7,7 +7,7 @@ import java.util.ArrayList;
 	public class NoventaGrausWorker extends Worker{
 		NoventaGrausWorker(String socket, int PORTO, String typeOfWorker){
 		super(socket, PORTO, typeOfWorker);
-		runClient();
+		runWorker();
 	}
 
 	
