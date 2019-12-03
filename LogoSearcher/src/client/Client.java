@@ -33,6 +33,9 @@ public class Client {
 
 	private static final int CLIENT = 1;
 
+	private ArrayList<BufferedImage> buffImgs;
+	private File[] imagensDir;
+
 	private void runClient() {
 		try {
 			doConections();
@@ -43,6 +46,7 @@ public class Client {
 			@SuppressWarnings("unchecked")
 			ArrayList<String> types = (ArrayList<String>) in.readObject();
 			window.writeSearchTypes(types); // Vai escrever os tipos de pesquisa disponoveis
+			receiveObjects();
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -58,7 +62,8 @@ public class Client {
 	public void sendImages(File[] imagensDir, BufferedImage subimagem, List<String> types) {
 		byte[] subimg = convertToByteArray(subimagem);
 		ArrayList<byte[]> imgs = new ArrayList<>();
-		ArrayList<BufferedImage> buffImgs = new ArrayList<>();
+		buffImgs = new ArrayList<>();
+		this.imagensDir = imagensDir;
 
 		for (File f : imagensDir) {
 			try {
@@ -75,7 +80,6 @@ public class Client {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		new ReceiveResults(buffImgs,imagensDir).start();
 	}
 
 	private byte[] convertToByteArray(BufferedImage img) {
@@ -90,30 +94,43 @@ public class Client {
 		}
 		return null;
 	}
-
-	private class ReceiveResults extends Thread {
-		private ArrayList<BufferedImage> buffImgs;
-		private File[] imagensDir;
-
-		private ReceiveResults(ArrayList<BufferedImage> buffImgs, File[] imagensDir) {
-			this.buffImgs = buffImgs;
-			this.imagensDir = imagensDir;
-		}
-
-		public void run() {
+	
+	private void receiveObjects() {
+		while (true) {
 			try {
-				@SuppressWarnings("unchecked")
-				HashMap<Integer, ArrayList<Point[]>> results = (HashMap<Integer, ArrayList<Point[]>>) in.readObject();
-				LinkedHashMap<String, ImageIcon> images = new LinkedHashMap<>();
-				for (Integer i : results.keySet()) {
-					drawImage(results.get(i), buffImgs.get(i));
-					String imageName = imagensDir[i].getName();
-					images.put(imageName, new ImageIcon(buffImgs.get(i)));
+				Object o = in.readObject();
+				if (o instanceof ArrayList) {
+					@SuppressWarnings("unchecked")
+					ArrayList<String> types = (ArrayList<String>) o;
+					window.writeSearchTypes(types);
 				}
-				window.update(images);
+				if (o instanceof HashMap) {
+					@SuppressWarnings("unchecked")
+					HashMap<Integer, ArrayList<Point[]>> results = (HashMap<Integer, ArrayList<Point[]>>) o;
+					new ReceiveResults(results).start();;
+				}
 			} catch (ClassNotFoundException e) {
 			} catch (IOException e) {
 			}
+		}
+	}
+
+	private class ReceiveResults extends Thread {
+		
+		private HashMap<Integer, ArrayList<Point[]>> results;
+
+		public ReceiveResults(HashMap<Integer, ArrayList<Point[]>> results) {
+			this.results = results;
+		}
+
+		public void run() {
+			LinkedHashMap<String, ImageIcon> images = new LinkedHashMap<>();
+			for (Integer i : results.keySet()) {
+				drawImage(results.get(i), buffImgs.get(i));
+				String imageName = imagensDir[i].getName();
+				images.put(imageName, new ImageIcon(buffImgs.get(i)));
+			}
+			window.update(images);
 		}
 
 		private void drawImage(ArrayList<Point[]> results, BufferedImage imagem) {

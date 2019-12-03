@@ -20,6 +20,7 @@ public class DealWithClient extends DealWith {
 
 	public DealWithClient(Server server, ObjectInputStream in, ObjectOutputStream out) {
 		super(server, in, out);
+		server.addDWC(this);
 	}
 
 	@Override
@@ -101,4 +102,11 @@ public class DealWithClient extends DealWith {
 		}
 	}
 
+	public void sendTypes(ArrayList<String> typesAvailable) {
+		try {
+			out.writeObject(typesAvailable);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

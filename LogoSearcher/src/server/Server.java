@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import server.dealwith.DealWithClient;
 import server.objects.BlockingQueue;
 import server.objects.Task;
 import server.objects.TaskMap;
@@ -17,6 +18,7 @@ public class Server {
 	private final ThreadPool pool = new ThreadPool(2);
 	private TaskMap tasks = new TaskMap();
 	private HashMap<String, Integer> types = new HashMap<>();
+	private ArrayList<DealWithClient> dwcList = new ArrayList<>();
 	
 	public Server(String port) {
 		PORTO = Integer.parseInt(port);
@@ -47,6 +49,7 @@ public class Server {
 		} else {
 			types.put(type, 1);
 			tasks.addType(type);
+			sendTypesToDWC();
 		}
 	}
 
@@ -77,14 +80,25 @@ public class Server {
 		if (types.containsKey(type)) {
 			if (types.get(type)>1)
 				types.put(type,types.get(type)-1);
-			else
+			else {
 				types.remove(type);
+				sendTypesToDWC();
+			}
 		}
 	}
 	
 	public boolean isLastWorker(String type) {
 		return types.get(type) == 1;
 	}
-
+	
+	private void sendTypesToDWC() {
+		for (DealWithClient d: dwcList) {
+			d.sendTypes(getTypesAvailable());
+		}
+	}
+	
+	public void addDWC(DealWithClient dwc) {
+		dwcList.add(dwc);
+	}
 
 }
