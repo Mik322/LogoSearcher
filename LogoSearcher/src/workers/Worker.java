@@ -22,7 +22,7 @@ public abstract class Worker extends Thread {
 	private ObjectOutputStream out;
 	private String endereco;
 	private int PORTO;
-	private Object typeOfWorker;
+	private String typeOfWorker;
 
 	private static final int WORKER = 2;
 
