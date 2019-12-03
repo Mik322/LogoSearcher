@@ -41,12 +41,15 @@ public class DealWithWorker extends DealWith {
 				}
 			}
 		} catch (IOException e) {
-			if (task!=null) {
+			e.printStackTrace();
+			if (task != null) {
 				workerDisconnected(task);
 			}
+			server.eliminateWorker(type);
+
 		}
 	}
-	
+
 	private void workerDisconnected(Task task) {
 		BlockingQueue<Task> queue = server.getQueue(type);
 		queue.offer(task);
@@ -56,7 +59,6 @@ public class DealWithWorker extends DealWith {
 				t.getDwc().receiveResult(t.getIndex(), new ArrayList<Point[]>());
 			}
 		}
-		server.eliminateWorker(type);
 	}
 
 }

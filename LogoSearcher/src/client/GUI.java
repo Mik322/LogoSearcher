@@ -179,6 +179,7 @@ public class GUI{
 	}
 
 	public void writeSearchTypes(ArrayList<String> types) {
+		typesOfWorkers.clear();
 		for(String s: types) {
 			typesOfWorkers.addElement(s);
 		}
