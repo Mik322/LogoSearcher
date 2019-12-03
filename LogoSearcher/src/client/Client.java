@@ -13,6 +13,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -20,7 +21,7 @@ import javax.swing.ImageIcon;
 
 import streamedobjects.Job;
 
-public class Client{
+public class Client {
 	private GUI window;
 
 	private final int PORTO;
@@ -74,7 +75,7 @@ public class Client{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		new ReceiveResults(buffImgs).start();
+		new ReceiveResults(buffImgs,imagensDir).start();
 	}
 
 	private byte[] convertToByteArray(BufferedImage img) {
@@ -92,41 +93,40 @@ public class Client{
 
 	private class ReceiveResults extends Thread {
 		private ArrayList<BufferedImage> buffImgs;
-		private ReceiveResults(ArrayList<BufferedImage> buffImgs) {
+		private File[] imagensDir;
+
+		private ReceiveResults(ArrayList<BufferedImage> buffImgs, File[] imagensDir) {
 			this.buffImgs = buffImgs;
+			this.imagensDir = imagensDir;
 		}
+
 		public void run() {
-			int n = 0;
 			try {
 				@SuppressWarnings("unchecked")
 				HashMap<Integer, ArrayList<Point[]>> results = (HashMap<Integer, ArrayList<Point[]>>) in.readObject();
-				HashMap<String, ImageIcon> images = new HashMap<>();
-				for (int i=0; i!= buffImgs.size(); i++) {
-					if (results.get(new Integer(i)).size() != 0) {
-						drawImage(results.get(new Integer(i)), buffImgs.get(i));
-						String imageName = "out" + ++n + ".png";
-						images.put(imageName, new ImageIcon(buffImgs.get(i)));
-					}
+				LinkedHashMap<String, ImageIcon> images = new LinkedHashMap<>();
+				for (Integer i : results.keySet()) {
+					drawImage(results.get(i), buffImgs.get(i));
+					String imageName = imagensDir[i].getName();
+					images.put(imageName, new ImageIcon(buffImgs.get(i)));
 				}
 				window.update(images);
 			} catch (ClassNotFoundException e) {
 			} catch (IOException e) {
 			}
 		}
-		
+
 		private void drawImage(ArrayList<Point[]> results, BufferedImage imagem) {
 			for (Point[] p : results) {
 				Graphics2D g2d = imagem.createGraphics();
 				g2d.setColor(Color.RED);
-				g2d.drawRect((int) p[0].getX(), (int) p[0].getY(),
-						(int) (p[1].getX() - p[0].getX()), 
+				g2d.drawRect((int) p[0].getX(), (int) p[0].getY(), (int) (p[1].getX() - p[0].getX()),
 						(int) (p[1].getY() - p[0].getY()));
 				g2d.dispose();
 			}
 		}
 	}
-	
-	
+
 	public Client(String endereco, int PORTO) {
 		this.endereco = endereco;
 		this.PORTO = PORTO;

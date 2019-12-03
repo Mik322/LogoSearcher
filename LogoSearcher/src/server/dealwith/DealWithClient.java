@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import server.Server;
+import server.dealwith.comparator.ResultsComparator;
 import server.objects.Task;
 import streamedobjects.Job;
 
@@ -54,9 +57,21 @@ public class DealWithClient extends DealWith {
 		}
 		// manda resultados para cliente
 		try {
-			out.writeObject(results.resultsMap);
+			out.writeObject(sortMap());
 		} catch (IOException e) {
 		}
+	}
+	
+	private HashMap<Integer, ArrayList<Point[]>> sortMap() {
+		HashMap<Integer, ArrayList<Point[]>> sortedMap = new HashMap<>();
+		for (Integer i: results.resultsMap.keySet()) {
+			if (results.resultsMap.get(i).size()!=0) {
+				sortedMap.put(i, results.resultsMap.get(i));
+			}
+		}
+		List<ArrayList<Point[]>> listBySize = new ArrayList<>(sortedMap.values());
+		Collections.sort(listBySize, new ResultsComparator());
+		return sortedMap;
 	}
 
 	public synchronized void receiveResult(int imgIndex, ArrayList<Point[]> points) {
