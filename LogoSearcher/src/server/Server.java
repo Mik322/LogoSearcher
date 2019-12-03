@@ -81,6 +81,10 @@ public class Server {
 				types.remove(type);
 		}
 	}
+	
+	public boolean isLastWorker(String type) {
+		return types.get(type) == 1;
+	}
 
 
 }

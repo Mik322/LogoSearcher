@@ -1,6 +1,5 @@
 package server.dealwith;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -20,14 +19,10 @@ public abstract class DealWith extends Thread {
 	}
 	
 	public void run() {
-		try {
-			serve();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		serve();
 	}
 	
-	abstract void serve() throws IOException;
+	abstract void serve();
 
 	public void sendToServer(Task task) {
 		server.sendTask(task);

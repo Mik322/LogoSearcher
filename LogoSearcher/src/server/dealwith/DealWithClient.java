@@ -20,7 +20,8 @@ public class DealWithClient extends DealWith {
 	}
 
 	@Override
-	void serve() throws IOException {
+	void serve() {
+		try {
 		out.writeObject(server.getTypesAvailable());
 		out.flush();
 		while (true) {
@@ -38,6 +39,9 @@ public class DealWithClient extends DealWith {
 			} catch (ClassNotFoundException e) {
 			}
 			waitResults();
+		}
+		} catch(IOException e) {
+			e.printStackTrace();
 		}
 	}
 
