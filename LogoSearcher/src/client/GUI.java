@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -31,11 +32,11 @@ public class GUI{
 	private JFrame frame;
 	private Client client;
 	private BufferedImage logo;
-	private String dirOut;
 	private File jDir[];
 	private DefaultListModel<String> model = new DefaultListModel<>();
 	private DefaultListModel<String> typesOfWorkers = new DefaultListModel<>();
 	private List<String> types = new ArrayList<String>();
+	private HashMap<String, ImageIcon> images;
 
 
 	public GUI(Client c) {
@@ -68,15 +69,12 @@ public class GUI{
 		model.addElement("Imagens encontradas");
 
 		JList<String> list = new JList<>(model);
+		list.setFixedCellWidth(125);
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
-					// File selectedValue = new File(list.getSelectedValue());
-					String fullDir = dirOut + "\\" + list.getSelectedValue();
-
-					ImageIcon imageIcon = new ImageIcon(fullDir);
-					JLabel imageLabel = new JLabel(imageIcon);
+					JLabel imageLabel = new JLabel(images.get(list.getSelectedValue()));
 					panelIcon.removeAll();
 					panelIcon.add(imageLabel, BorderLayout.CENTER);
 					panelIcon.revalidate();
@@ -167,16 +165,16 @@ public class GUI{
 	}
 
 	public void open() {
-		frame.setSize(700, 550);
+		frame.setSize(1500, 1000);
 		frame.setVisible(true);
 	}
 
 	// Quando o cliente recebe um resultado de pesquisa vai ativar este procedimento
-	public void update(File file) {
-		dirOut = file.getAbsolutePath();
-		File[] imgs = file.listFiles();
-		for (File f : imgs) {
-			model.addElement(f.getName());
+	public void update(HashMap<String,ImageIcon> images) {
+		this.images = images;
+		model.clear();
+		for (String s: images.keySet()) {
+			model.addElement(s);
 		}
 	}
 

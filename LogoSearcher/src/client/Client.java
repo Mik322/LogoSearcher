@@ -16,12 +16,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import streamedobjects.Job;
 
 public class Client{
-	private static String OUTPUT_NAME = "OUT";
-	private File file;
 	private GUI window;
 
 	private final int PORTO;
@@ -101,18 +100,18 @@ public class Client{
 			try {
 				@SuppressWarnings("unchecked")
 				HashMap<Integer, ArrayList<Point[]>> results = (HashMap<Integer, ArrayList<Point[]>>) in.readObject();
+				HashMap<String, ImageIcon> images = new HashMap<>();
 				for (int i=0; i!= buffImgs.size(); i++) {
 					if (results.get(new Integer(i)).size() != 0) {
-						drawImage(results.get(new Integer(i)), buffImgs.get(new Integer(i)));
-						String fileName = OUTPUT_NAME + "\\out" + ++n + ".png";
-						ImageIO.write(buffImgs.get(new Integer(i)), "png", new File(fileName));
+						drawImage(results.get(new Integer(i)), buffImgs.get(i));
+						String imageName = "out" + ++n + ".png";
+						images.put(imageName, new ImageIcon(buffImgs.get(i)));
 					}
 				}
+				window.update(images);
 			} catch (ClassNotFoundException e) {
 			} catch (IOException e) {
 			}
-			file = new File(OUTPUT_NAME);
-			window.update(file);;
 		}
 		
 		private void drawImage(ArrayList<Point[]> results, BufferedImage imagem) {
