@@ -26,25 +26,25 @@ public class DealWithClient extends DealWith {
 	@Override
 	void serve() {
 		try {
-		out.writeObject(server.getTypesAvailable());
-		out.flush();
-		while (true) {
-			try {
-				Job job = (Job) in.readObject();
-				results = new Results(job.getTypes().size(), job.getImgs().size());
-				int index = 0;
-				for (byte[] img : job.getImgs()) {
-					results.createEntry(index);
-					for (String t : job.getTypes()) {
-						sendToServer(new Task(img, job.getSubimg(), this, t, index));
+			out.writeObject(server.getTypesAvailable());
+			out.flush();
+			while (true) {
+				try {
+					Job job = (Job) in.readObject();
+					results = new Results(job.getTypes().size(), job.getImgs().size());
+					int index = 0;
+					for (byte[] img : job.getImgs()) {
+						results.createEntry(index);
+						for (String t : job.getTypes()) {
+							sendToServer(new Task(img, job.getSubimg(), this, t, index));
+						}
+						index++;
 					}
-					index++;
+				} catch (ClassNotFoundException e) {
 				}
-			} catch (ClassNotFoundException e) {
+				waitResults();
 			}
-			waitResults();
-		}
-		} catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -62,11 +62,11 @@ public class DealWithClient extends DealWith {
 		} catch (IOException e) {
 		}
 	}
-	
+
 	private HashMap<Integer, ArrayList<Point[]>> sortMap() {
 		HashMap<Integer, ArrayList<Point[]>> sortedMap = new HashMap<>();
-		for (Integer i: results.resultsMap.keySet()) {
-			if (results.resultsMap.get(i).size()!=0) {
+		for (Integer i : results.resultsMap.keySet()) {
+			if (results.resultsMap.get(i).size() != 0) {
 				sortedMap.put(i, results.resultsMap.get(i));
 			}
 		}
@@ -77,11 +77,12 @@ public class DealWithClient extends DealWith {
 
 	public synchronized void receiveResult(int imgIndex, ArrayList<Point[]> points) {
 		results.addResult(imgIndex, points);
-		notifyAll();
+		if (results.numReceived == results.expectedResultsNum)
+			notifyAll();
 	}
 
 	private class Results {
-		private HashMap<Integer, ArrayList<Point[]> > resultsMap = new HashMap<>();
+		private HashMap<Integer, ArrayList<Point[]>> resultsMap = new HashMap<>();
 		private int numReceived;
 		private int expectedResultsNum;
 

@@ -14,6 +14,7 @@ import streamedobjects.SearchTask;
 public class DealWithWorker extends DealWith {
 
 	private String type;
+	Task task = null;
 
 	public DealWithWorker(Server server, ObjectInputStream in, ObjectOutputStream out) {
 		super(server, in, out);
@@ -26,7 +27,6 @@ public class DealWithWorker extends DealWith {
 			server.addSearchType(type);
 		} catch (ClassNotFoundException | IOException e) {
 		}
-		Task task = null;
 		try {
 			while (true) {
 				try {
