@@ -106,7 +106,6 @@ public abstract class Worker extends Thread {
 
 		default:
 			System.out.println("Type of Worker not available, try other type:");
-			main(args);
 		}
 	}
 
