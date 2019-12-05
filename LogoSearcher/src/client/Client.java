@@ -103,7 +103,13 @@ public class Client {
 				if (o instanceof ArrayList) {
 					@SuppressWarnings("unchecked")
 					ArrayList<String> types = (ArrayList<String>) o;
-					window.writeSearchTypes(types);
+					SwingUtilities.invokeLater(new Runnable() {
+						
+						@Override
+						public void run() {
+							window.writeSearchTypes(types);
+						}
+					});
 				}
 				if (o instanceof HashMap) {
 					@SuppressWarnings("unchecked")
