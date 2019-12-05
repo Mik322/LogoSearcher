@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import server.Server;
@@ -14,10 +15,14 @@ import streamedobjects.SearchTask;
 public class DealWithWorker extends DealWith {
 
 	private String type;
-	Task task = null;
+	private Task task = null;
+	private TimeCounter tc;;
+	private boolean waitingResult = false;
+	private Socket s;
 
-	public DealWithWorker(Server server, ObjectInputStream in, ObjectOutputStream out) {
+	public DealWithWorker(Server server, ObjectInputStream in, ObjectOutputStream out, Socket s) {
 		super(server, in, out);
+		this.s = s;
 	}
 
 	@Override
@@ -27,26 +32,26 @@ public class DealWithWorker extends DealWith {
 			server.addSearchType(type);
 		} catch (ClassNotFoundException | IOException e) {
 		}
+		sendTask();
+	}
+	
+	private synchronized void sendTask() {
 		try {
+			ReceiveResult rr = new ReceiveResult(in, this);
+			rr.start();
 			while (true) {
-				try {
-					task = server.getQueue(type).poll();
-					out.writeObject(new SearchTask(task.getImg(), task.getSubimg()));
-					out.flush();
-					@SuppressWarnings("unchecked")
-					ArrayList<Point[]> points = (ArrayList<Point[]>) in.readObject(); // Recebe os pontos
-					task.getDwc().receiveResult(task.getIndex(), points); // Envia o resultado para o DWC correspondente
-					task = null;
-				} catch (ClassNotFoundException e) {
+				while(waitingResult) {
+					wait();
 				}
+				task = server.getQueue(type).poll();
+				out.writeObject(new SearchTask(task.getImg(), task.getSubimg()));
+				out.flush();
+				waitingResult = true;
+				tc = new TimeCounter();
+				tc.start();
 			}
-		} catch (IOException e) {
+		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
-			if (task != null) {
-				workerDisconnected(task);
-			}
-			server.eliminateWorker(type);
-
 		}
 	}
 
@@ -60,5 +65,55 @@ public class DealWithWorker extends DealWith {
 			}
 		}
 	}
+	
+	private synchronized void notifySend() {
+		task = null;
+		waitingResult = false;
+		notify();
+	}
 
+	private class ReceiveResult extends Thread {
+		private ObjectInputStream in;
+		private DealWithWorker dww;
+
+		private ReceiveResult(ObjectInputStream in, DealWithWorker dww) {
+			this.in = in;
+			this.dww = dww;
+		}
+
+		@SuppressWarnings("unchecked")
+		public synchronized void run() {
+			try {
+				while (true) {
+					try {
+						ArrayList<Point[]> points = (ArrayList<Point[]>) in.readObject();
+						tc.interrupt();
+						task.getDwc().receiveResult(task.getIndex(), points); // Envia o resultado para o DWC
+						notifySend();
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					}
+				}
+			} catch (IOException e) {
+				dww.interrupt();
+				if (task != null) {
+					workerDisconnected(task);
+				}
+				server.eliminateWorker(type);
+			}
+		}
+	}
+
+	private class TimeCounter extends Thread {
+		private static final int MAX_TIME = 10000;
+
+		public void run() {
+			try {
+				sleep(MAX_TIME);
+				s.close();
+			} catch (InterruptedException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

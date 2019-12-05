@@ -78,7 +78,7 @@ public class DealWithClient extends DealWith {
 	public synchronized void receiveResult(int imgIndex, ArrayList<Point[]> points) {
 		results.addResult(imgIndex, points);
 		if (results.numReceived == results.expectedResultsNum)
-			notifyAll();
+			notify();
 	}
 
 	private class Results {

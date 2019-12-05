@@ -26,7 +26,7 @@ public class Handler implements Runnable {
 			if (type == CLIENT) {
 				new DealWithClient(server, in, out).start();
 			} else if (type == WORKER) {
-				new DealWithWorker(server, in, out).start();
+				new DealWithWorker(server, in, out, s).start();
 			}
 		} catch (IOException e) {}
 	}
