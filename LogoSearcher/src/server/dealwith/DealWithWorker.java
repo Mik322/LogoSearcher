@@ -37,8 +37,7 @@ public class DealWithWorker extends DealWith {
 	
 	private synchronized void sendTask() {
 		try {
-			ReceiveResult rr = new ReceiveResult(in, this);
-			rr.start();
+			new ReceiveResult(in, this).start();
 			while (true) {
 				while(waitingResult) {
 					wait();
@@ -95,6 +94,7 @@ public class DealWithWorker extends DealWith {
 					}
 				}
 			} catch (IOException e) {
+				e.printStackTrace();
 				dww.interrupt();
 				if (task != null) {
 					workerDisconnected(task);
@@ -112,7 +112,6 @@ public class DealWithWorker extends DealWith {
 				sleep(MAX_TIME);
 				s.close();
 			} catch (InterruptedException | IOException e) {
-				e.printStackTrace();
 			}
 		}
 	}

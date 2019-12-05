@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 
 import streamedobjects.Job;
 
@@ -130,7 +131,13 @@ public class Client {
 				String imageName = imagensDir[i].getName();
 				images.put(imageName, new ImageIcon(buffImgs.get(i)));
 			}
-			window.update(images);
+			SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					window.update(images);
+				}
+			});
 		}
 
 		private void drawImage(ArrayList<Point[]> results, BufferedImage imagem) {
